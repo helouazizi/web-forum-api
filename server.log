@@ -1,2 +1,3 @@
-2025/04/26 12:47:57 2025-04-26T12:47:57+01:00 [Function: web-forum/internal/repository.(*UserRepository).CreateUser] [Line: 32] Username or email already taken
-2025/04/26 12:47:57 2025-04-26T12:47:57+01:00 [Function: web-forum/internal/handlers.(*UserHandler).CreateUser] [Line: 35] Username or email already taken
+2025/04/26 13:43:17 2025-04-26T13:43:17+01:00 [Function: web-forum/internal/repository.(*UserRepository).CreateUser] [Line: 32] Username or email already taken
+2025/04/26 13:43:17 2025-04-26T13:43:17+01:00 [Function: web-forum/internal/handlers.(*UserHandler).CreateUser] [Line: 35] Username or email already taken
+2025/04/26 13:59:11 2025-04-26T13:59:11+01:00 [Function: web-forum/internal/handlers.(*UserHandler).UpdateUser] [Line: 51] invalid character '"' after object key:value pair

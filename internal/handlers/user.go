@@ -41,19 +41,22 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 	utils.RespondWithJSON(w, http.StatusCreated, createdUser)
 }
 
-// func (h *UserHandler) UpdateUser(w http.ResponseWriter, r *http.Request) {
-// 	var user models.User
-// 	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
-// 		logger.LogWithDetails(err)
-// 		http.Error(w, "Invalid input", http.StatusBadRequest)
-// 		return
-// 	}
-// 	createdUser, err := h.userService.CreateUser(user)
-// 	if err != nil {
-// 		logger.LogWithDetails(err)
-// 		http.Error(w, "Failed to create user", http.StatusInternalServerError)
-// 		return
-// 	}
-// 	w.WriteHeader(http.StatusCreated)
-// 	json.NewEncoder(w).Encode(createdUser)
-// }
+func (h *UserHandler) UpdateUser(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		utils.RespondWithError(w, models.Error{Message: "Methos Not Allowed", Code: http.StatusMethodNotAllowed})
+		return
+	}
+	var user models.User
+	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
+		logger.LogWithDetails(err)
+		utils.RespondWithError(w, models.Error{Message: "Bad Request", Code: http.StatusBadRequest})
+		return
+	}
+	updatedUser, err := h.userService.UpdateUser(user)
+	if err.Code != http.StatusOK {
+		logger.LogWithDetails(fmt.Errorf(err.Message))
+		utils.RespondWithError(w, err)
+		return
+	}
+	utils.RespondWithJSON(w, http.StatusCreated, updatedUser)
+}

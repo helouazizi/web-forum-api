@@ -13,7 +13,7 @@ import (
 type UserMethods interface {
 	CreateUser(user models.User) (models.User, models.Error)
 	// GetUserByID(id int) (model.User, error)
-	// UpdateUser(user models.User) (models.User, models.Error)
+	UpdateUser(user models.User) (models.User, models.Error)
 	// IsUsernameOrEmailTaken(username, email string) (bool, models.Error)
 }
 
@@ -36,8 +36,8 @@ func (r *UserRepository) CreateUser(user models.User) (models.User, models.Error
 	// Proceed to insert
 	query := `
 	INSERT INTO users (
-		username, email, password_hash, role, is_active, created_at, updated_at
-	) VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+		username, email, password_hash ,updated_at
+	) VALUES (?, ?, ?, CURRENT_TIMESTAMP)
 	`
 	result, err := r.db.Exec(query,
 		user.Username,
@@ -72,7 +72,7 @@ func (r *UserRepository) CreateUser(user models.User) (models.User, models.Error
 	}
 }
 
-func (r *UserRepository) UpdateUser(user models.User) (models.User, error) {
+func (r *UserRepository) UpdateUser(user models.User) (models.User, models.Error) {
 	query := `
 	UPDATE users
 	SET username = ?, email = ?, password_hash = ?, bio = ?, updated_at = CURRENT_TIMESTAMP
@@ -88,10 +88,15 @@ func (r *UserRepository) UpdateUser(user models.User) (models.User, error) {
 	)
 	if err != nil {
 		logger.LogWithDetails(err)
-		return models.User{}, fmt.Errorf("failed to update user: %w", err)
+		return models.User{}, models.Error{
+			Message: "Internal server error",
+			Code:    http.StatusInternalServerError,
+		}
 	}
-
-	return user, nil
+	return user, models.Error{
+		Message: "seccefully updated information",
+		Code:    http.StatusOK, // 200
+	}
 }
 
 func (r *UserRepository) IsUsernameOrEmailTaken(username, email string) models.Error {

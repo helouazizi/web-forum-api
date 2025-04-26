@@ -23,8 +23,15 @@ func (s *UserService) CreateUser(user models.User) (models.User, models.Error) {
 	return User, err
 }
 
-// func (s *UserService) UpdateUser(user models.User) (models.User, models.Error) {
-// 	return s.repo.UpdateUser(user)
-// }
+func (s *UserService) UpdateUser(user models.User) (models.User, models.Error) {
+	User, err := s.repo.UpdateUser(user)
+	if err.Code != http.StatusOK {
+		return models.User{}, err
+	}
+	return User, models.Error{
+		Message: "seccefully updated information",
+		Code:    http.StatusOK, // 200
+	}
+}
 
 // Implement other methods...
