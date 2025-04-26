@@ -5,6 +5,8 @@ import (
 	"regexp"
 	"slices"
 	"strings"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 func IsValidUsername(username string) bool {
@@ -54,6 +56,11 @@ func IsStrongPassword(password string) bool {
 
 	// Password is strong if it contains at least one lowercase letter and one digit
 	return hasLower && hasDigit && hasUpper
+}
+
+func HashPassWord(pass string) (string, error) {
+	bytes, err := bcrypt.GenerateFromPassword([]byte(pass), bcrypt.DefaultCost)
+	return string(bytes), err
 }
 
 // func IsExist(table, collumn0, collumn1, value string) (string, bool) {

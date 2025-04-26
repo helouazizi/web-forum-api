@@ -7,7 +7,10 @@ import (
 	"time"
 
 	"web-forum/internal/models"
+	"web-forum/internal/utils"
 	"web-forum/pkg/logger"
+
+	"github.com/google/uuid"
 )
 
 type UserMethods interface {
@@ -33,16 +36,28 @@ func (r *UserRepository) CreateUser(user models.User) (models.User, models.Error
 		return models.User{}, errorInfo
 	}
 
+	// lets hash the pass
+	hashedPass, err := utils.HashPassWord(user.PasswordHash)
+	if err != nil {
+		return models.User{}, models.Error{
+			Message: "Internal server error",
+			Code:    http.StatusInternalServerError,
+		}
+	}
+	// this the token
+	token := uuid.New().String()
+
 	// Proceed to insert
 	query := `
 	INSERT INTO users (
-		username, email, password_hash ,updated_at
-	) VALUES (?, ?, ?, CURRENT_TIMESTAMP)
+		username, email, password_hash,session_token ,created_at,updated_at
+	) VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP,CURRENT_TIMESTAMP)
 	`
 	result, err := r.db.Exec(query,
 		user.Username,
 		user.Email,
-		user.PasswordHash,
+		hashedPass,
+		token,
 		user.Role,
 		user.IsActive,
 	)
@@ -63,8 +78,12 @@ func (r *UserRepository) CreateUser(user models.User) (models.User, models.Error
 	}
 
 	user.ID = int(id)
+	user.SessionToken = token
 	user.CreatedAt = time.Now() // or query back from DB
 	user.UpdatedAt = time.Now()
+	user.LastLoginAt = time.Now()
+	user.SessionExpiresAt = time.Now().Add(5000)
+	user.PasswordHash = "******"
 
 	return user, models.Error{
 		Message: "seccefully created the user",

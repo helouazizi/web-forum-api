@@ -1,3 +1,10 @@
-2025/04/26 13:43:17 2025-04-26T13:43:17+01:00 [Function: web-forum/internal/repository.(*UserRepository).CreateUser] [Line: 32] Username or email already taken
-2025/04/26 13:43:17 2025-04-26T13:43:17+01:00 [Function: web-forum/internal/handlers.(*UserHandler).CreateUser] [Line: 35] Username or email already taken
-2025/04/26 13:59:11 2025-04-26T13:59:11+01:00 [Function: web-forum/internal/handlers.(*UserHandler).UpdateUser] [Line: 51] invalid character '"' after object key:value pair
+2025/04/26 15:44:05 2025-04-26T15:44:05+01:00 [Function: web-forum/internal/handlers.(*UserHandler).CreateUser] [Line: 29] invalid character '}' looking for beginning of object key string
+2025/04/26 15:44:43 2025-04-26T15:44:43+01:00 [Function: web-forum/internal/handlers.(*UserHandler).CreateUser] [Line: 29] invalid character '}' looking for beginning of object key string
+2025/04/26 16:16:31 2025-04-26T16:16:31+01:00 [Function: web-forum/internal/repository.(*UserRepository).CreateUser] [Line: 35] Username or email already taken
+2025/04/26 16:16:31 2025-04-26T16:16:31+01:00 [Function: web-forum/internal/handlers.(*UserHandler).CreateUser] [Line: 35] Username or email already taken
+2025/04/26 16:26:27 2025-04-26T16:26:27+01:00 [Function: web-forum/internal/repository.(*UserRepository).CreateUser] [Line: 35] Username or email already taken
+2025/04/26 16:26:27 2025-04-26T16:26:27+01:00 [Function: web-forum/internal/handlers.(*UserHandler).CreateUser] [Line: 35] Username or email already taken
+2025/04/26 16:26:35 2025-04-26T16:26:35+01:00 [Function: web-forum/internal/repository.(*UserRepository).CreateUser] [Line: 35] Username or email already taken
+2025/04/26 16:26:35 2025-04-26T16:26:35+01:00 [Function: web-forum/internal/handlers.(*UserHandler).CreateUser] [Line: 35] Username or email already taken
+2025/04/26 16:26:40 2025-04-26T16:26:40+01:00 [Function: web-forum/internal/repository.(*UserRepository).CreateUser] [Line: 35] Username or email already taken
+2025/04/26 16:26:40 2025-04-26T16:26:40+01:00 [Function: web-forum/internal/handlers.(*UserHandler).CreateUser] [Line: 35] Username or email already taken
