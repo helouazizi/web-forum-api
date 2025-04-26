@@ -15,9 +15,9 @@ import (
 
 type UserMethods interface {
 	CreateUser(user models.User) (models.User, models.Error)
-	// GetUserByID(id int) (model.User, error)
+	Login(user models.User) (models.User, models.Error)
 	UpdateUser(user models.User) (models.User, models.Error)
-	// IsUsernameOrEmailTaken(username, email string) (bool, models.Error)
+	IsUsernameOrEmailTaken(username, email string) models.Error
 }
 
 type UserRepository struct {
@@ -91,6 +91,40 @@ func (r *UserRepository) CreateUser(user models.User) (models.User, models.Error
 	}
 }
 
+func (r *UserRepository) Login(user models.User) (models.User, models.Error) {
+	// lets check the username existance
+	err := r.IsUsernameOrEmailTaken(user.Username, user.Email)
+	if err.Code == http.StatusOK {
+		logger.LogWithDetails(fmt.Errorf(err.Message))
+		return models.User{}, models.Error{Message: "Invalid username or password", Code: http.StatusBadRequest}
+	}
+
+	// check the pass word
+	pass, errr := utils.HashPassWord(user.PasswordHash)
+	if errr != nil {
+		logger.LogWithDetails(errr)
+		return models.User{}, models.Error{Message: "Invalid username or password", Code: http.StatusBadRequest}
+	}
+	var hash string
+	errrr := r.SelectFromDB("password_hash", "users", user.Username, hash)
+	if errrr.Code != http.StatusFound { /////////////////////////////////
+		logger.LogWithDetails(fmt.Errorf(errrr.Message))
+		return models.User{}, models.Error{Message: "Invalid username or password", Code: http.StatusBadRequest}
+	}
+	errrrr := utils.ComparePass([]byte(hash), []byte(pass))
+	if errrrr != nil {
+		logger.LogWithDetails(errrrr)
+		return models.User{}, models.Error{Message: "Invalid username or password", Code: http.StatusBadRequest}
+	}
+
+	// lets update the token
+
+	return user, models.Error{
+		Message: "seccefully loged the user",
+		Code:    http.StatusOK,
+	}
+}
+
 func (r *UserRepository) UpdateUser(user models.User) (models.User, models.Error) {
 	query := `
 	UPDATE users
@@ -123,7 +157,6 @@ func (r *UserRepository) IsUsernameOrEmailTaken(username, email string) models.E
 	SELECT COUNT(*) FROM users
 	WHERE username = ? OR email = ?
 	`
-
 	var count int
 	err := r.db.QueryRow(query, username, email).Scan(&count)
 	if err != nil {
@@ -146,3 +179,37 @@ func (r *UserRepository) IsUsernameOrEmailTaken(username, email string) models.E
 		Code:    http.StatusOK, // 200
 	}
 }
+
+func (r *UserRepository) SelectFromDB(clomn, table, value string, toScan any) models.Error {
+	query := `
+	SELECT ? FROM ?
+	WHERE username = ? 
+	`
+
+	err := r.db.QueryRow(query, clomn, table, value).Scan(&toScan)
+	if err != nil {
+		return models.Error{
+			Message: "Internal server error",
+			Code:    http.StatusInternalServerError,
+		}
+	}
+	return models.Error{Message: "found a result", Code: http.StatusFound}
+}
+
+// func (r *UserRepository) InsertIntoDB(clomn, table, value string) models.Error {
+// 	query := `
+// 	INSERT INTO ? (?) VALUES (?)
+// 	`
+// 	result, err := r.db.Exec(query,
+// 		table,
+// 		clomn,
+// 		value
+// 	)
+// 	if err != nil {
+// 		return models.Error{
+// 			Message: "Internal server error",
+// 			Code:    http.StatusInternalServerError,
+// 		}
+// 	}
+// 	return models.Error{Message: "found a result", Code: http.StatusFound}
+// }

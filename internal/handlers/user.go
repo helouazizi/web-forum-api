@@ -60,3 +60,23 @@ func (h *UserHandler) UpdateUser(w http.ResponseWriter, r *http.Request) {
 	}
 	utils.RespondWithJSON(w, http.StatusCreated, updatedUser)
 }
+
+func (h *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		utils.RespondWithError(w, models.Error{Message: "Methos Not Allowed", Code: http.StatusMethodNotAllowed})
+		return
+	}
+	var user models.User
+	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
+		logger.LogWithDetails(err)
+		utils.RespondWithError(w, models.Error{Message: "Bad Request", Code: http.StatusBadRequest})
+		return
+	}
+	LogedUser, err := h.userService.Login(user)
+	if err.Code != http.StatusOK {
+		logger.LogWithDetails(fmt.Errorf(err.Message))
+		utils.RespondWithError(w, err)
+		return
+	}
+	utils.RespondWithJSON(w, http.StatusOK, LogedUser)
+}

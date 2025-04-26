@@ -1,10 +1,4 @@
-2025/04/26 15:44:05 2025-04-26T15:44:05+01:00 [Function: web-forum/internal/handlers.(*UserHandler).CreateUser] [Line: 29] invalid character '}' looking for beginning of object key string
-2025/04/26 15:44:43 2025-04-26T15:44:43+01:00 [Function: web-forum/internal/handlers.(*UserHandler).CreateUser] [Line: 29] invalid character '}' looking for beginning of object key string
-2025/04/26 16:16:31 2025-04-26T16:16:31+01:00 [Function: web-forum/internal/repository.(*UserRepository).CreateUser] [Line: 35] Username or email already taken
-2025/04/26 16:16:31 2025-04-26T16:16:31+01:00 [Function: web-forum/internal/handlers.(*UserHandler).CreateUser] [Line: 35] Username or email already taken
-2025/04/26 16:26:27 2025-04-26T16:26:27+01:00 [Function: web-forum/internal/repository.(*UserRepository).CreateUser] [Line: 35] Username or email already taken
-2025/04/26 16:26:27 2025-04-26T16:26:27+01:00 [Function: web-forum/internal/handlers.(*UserHandler).CreateUser] [Line: 35] Username or email already taken
-2025/04/26 16:26:35 2025-04-26T16:26:35+01:00 [Function: web-forum/internal/repository.(*UserRepository).CreateUser] [Line: 35] Username or email already taken
-2025/04/26 16:26:35 2025-04-26T16:26:35+01:00 [Function: web-forum/internal/handlers.(*UserHandler).CreateUser] [Line: 35] Username or email already taken
-2025/04/26 16:26:40 2025-04-26T16:26:40+01:00 [Function: web-forum/internal/repository.(*UserRepository).CreateUser] [Line: 35] Username or email already taken
-2025/04/26 16:26:40 2025-04-26T16:26:40+01:00 [Function: web-forum/internal/handlers.(*UserHandler).CreateUser] [Line: 35] Username or email already taken
+2025/04/26 21:27:29 2025-04-26T21:27:29+01:00 [Function: web-forum/internal/handlers.(*UserHandler).Login] [Line: 77] Invalid username or password
+2025/04/26 21:27:47 2025-04-26T21:27:47+01:00 [Function: web-forum/internal/handlers.(*UserHandler).Login] [Line: 77] Invalid username or password
+2025/04/26 21:30:25 2025-04-26T21:30:25+01:00 [Function: web-forum/internal/repository.(*UserRepository).Login] [Line: 111] Internal server error
+2025/04/26 21:30:25 2025-04-26T21:30:25+01:00 [Function: web-forum/internal/handlers.(*UserHandler).Login] [Line: 77] Invalid username or password

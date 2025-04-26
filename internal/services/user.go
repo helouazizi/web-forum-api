@@ -33,5 +33,15 @@ func (s *UserService) UpdateUser(user models.User) (models.User, models.Error) {
 		Code:    http.StatusOK, // 200
 	}
 }
+func (s *UserService) Login(user models.User) (models.User, models.Error) {
+	User, err := s.repo.Login(user)
+	if err.Code != http.StatusOK {
+		return models.User{}, err
+	}
+	return User, models.Error{
+		Message: "seccefully updated information",
+		Code:    http.StatusOK, // 200
+	}
+}
 
 // Implement other methods...

@@ -63,6 +63,10 @@ func HashPassWord(pass string) (string, error) {
 	return string(bytes), err
 }
 
+func ComparePass(hashed, pass []byte) error {
+	return bcrypt.CompareHashAndPassword(hashed, pass)
+}
+
 // func IsExist(table, collumn0, collumn1, value string) (string, bool) {
 // 	db, err := database.NewDatabase()
 // 	if err != nil {

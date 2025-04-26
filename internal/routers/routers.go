@@ -10,7 +10,7 @@ func SetupRoutes(h *app.Application) {
 	// this route for user
 	http.HandleFunc("POST /users/register", h.UserHandler.CreateUser)
 	http.HandleFunc("POST /users/update", h.UserHandler.UpdateUser)
-	// http.HandleFunc("/users", h.UserHandler.ListUsers)
+	http.HandleFunc("POST /users/login", h.UserHandler.Login)
 
 	// this routs for posts
 	// http.HandleFunc("/users", h.UserHandler.CreateUser)
