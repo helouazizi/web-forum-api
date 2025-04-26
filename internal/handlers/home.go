@@ -8,5 +8,5 @@ func Home(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("PAGE NOT FOUND"))
 		return
 	}
-	
+
 }

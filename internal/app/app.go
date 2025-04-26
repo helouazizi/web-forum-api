@@ -28,7 +28,6 @@ func NewApp(config *config.Configuration) *Application {
 	}
 	// Run database migrations to craete tables
 	database.Migrate(db)
-
 	// Initialize repository & service
 	userRepo := repository.NewUserRepository(db)
 	userService := services.NewUserService(userRepo)
