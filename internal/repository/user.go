@@ -92,6 +92,7 @@ func (r *UserRepository) CreateUser(user models.User) (models.User, models.Error
 }
 
 func (r *UserRepository) Login(user models.User) (models.User, models.Error) {
+
 	// lets check the username existance
 	err := r.IsUsernameOrEmailTaken(user.Username, user.Email)
 	if err.Code == http.StatusOK {
@@ -99,19 +100,13 @@ func (r *UserRepository) Login(user models.User) (models.User, models.Error) {
 		return models.User{}, models.Error{Message: "Invalid username or password", Code: http.StatusBadRequest}
 	}
 
-	// check the pass word
-	pass, errr := utils.HashPassWord(user.PasswordHash)
-	if errr != nil {
-		logger.LogWithDetails(errr)
-		return models.User{}, models.Error{Message: "Invalid username or password", Code: http.StatusBadRequest}
-	}
-	var hash string
-	errrr := r.SelectFromDB("password_hash", "users", user.Username, hash)
+	// // check the pass word
+	hash, errrr := r.SelectFromDB("password_hash", "users", user.Username)
 	if errrr.Code != http.StatusFound { /////////////////////////////////
 		logger.LogWithDetails(fmt.Errorf(errrr.Message))
 		return models.User{}, models.Error{Message: "Invalid username or password", Code: http.StatusBadRequest}
 	}
-	errrrr := utils.ComparePass([]byte(hash), []byte(pass))
+	errrrr := utils.ComparePass([]byte(hash), []byte(user.PasswordHash))
 	if errrrr != nil {
 		logger.LogWithDetails(errrrr)
 		return models.User{}, models.Error{Message: "Invalid username or password", Code: http.StatusBadRequest}
@@ -180,20 +175,20 @@ func (r *UserRepository) IsUsernameOrEmailTaken(username, email string) models.E
 	}
 }
 
-func (r *UserRepository) SelectFromDB(clomn, table, value string, toScan any) models.Error {
-	query := `
-	SELECT ? FROM ?
+func (r *UserRepository) SelectFromDB(clomn, table, value string) (string, models.Error) {
+	query := fmt.Sprintf(`
+	SELECT %s FROM %s
 	WHERE username = ? 
-	`
-
-	err := r.db.QueryRow(query, clomn, table, value).Scan(&toScan)
+	`, clomn, table)
+	var res string
+	err := r.db.QueryRow(query, value).Scan(&res)
 	if err != nil {
-		return models.Error{
+		return "nil", models.Error{
 			Message: "Internal server error",
 			Code:    http.StatusInternalServerError,
 		}
 	}
-	return models.Error{Message: "found a result", Code: http.StatusFound}
+	return res, models.Error{Message: "found a result", Code: http.StatusFound}
 }
 
 // func (r *UserRepository) InsertIntoDB(clomn, table, value string) models.Error {

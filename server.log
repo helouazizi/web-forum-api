@@ -1,4 +1,2 @@
-2025/04/26 21:27:29 2025-04-26T21:27:29+01:00 [Function: web-forum/internal/handlers.(*UserHandler).Login] [Line: 77] Invalid username or password
-2025/04/26 21:27:47 2025-04-26T21:27:47+01:00 [Function: web-forum/internal/handlers.(*UserHandler).Login] [Line: 77] Invalid username or password
-2025/04/26 21:30:25 2025-04-26T21:30:25+01:00 [Function: web-forum/internal/repository.(*UserRepository).Login] [Line: 111] Internal server error
-2025/04/26 21:30:25 2025-04-26T21:30:25+01:00 [Function: web-forum/internal/handlers.(*UserHandler).Login] [Line: 77] Invalid username or password
+2025/04/26 21:55:02 2025-04-26T21:55:02+01:00 [Function: web-forum/internal/repository.(*UserRepository).Login] [Line: 118] crypto/bcrypt: hashedPassword is not the hash of the given password
+2025/04/26 21:55:02 2025-04-26T21:55:02+01:00 [Function: web-forum/internal/handlers.(*UserHandler).Login] [Line: 77] Invalid username or password
