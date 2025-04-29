@@ -1,12 +1,8 @@
 package models
 
-import "time"
-
 type Post struct {
-	ID        int
-	UserID    int
-	Title     string
-	Content   string
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	ID      int    `json:"id"`
+	UserID  int    `json:"user_id"`
+	Title   string `json:"tilte"`
+	Content string `json:"content"`
 }

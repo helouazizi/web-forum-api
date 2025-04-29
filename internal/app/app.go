@@ -17,6 +17,7 @@ import (
 type Application struct {
 	DB          *sql.DB
 	UserHandler *handlers.UserHandler
+	PostHandler *handlers.PostHandler
 }
 
 func NewApp(config *config.Configuration) *Application {
@@ -28,13 +29,21 @@ func NewApp(config *config.Configuration) *Application {
 	}
 	// Run database migrations to craete tables
 	database.Migrate(db)
-	// Initialize repository & service
+	// Initialize repositorys
 	userMethods := repository.NewUserRepository(db)
+	postMrthods := repository.NewPostRepository(db)
+
+	// Initialize services
 	userService := services.NewUserService(userMethods)
+	postServices := services.NewPostService(postMrthods)
+
+	// Initialize handlers
 	userHandler := handlers.NewUserHandler(userService)
+	postHandler := handlers.NewPostHandler(postServices)
 
 	return &Application{
 		DB:          db,
 		UserHandler: userHandler,
+		PostHandler: postHandler,
 	}
 }

@@ -13,7 +13,7 @@ func SetupRoutes(h *app.Application) {
 	http.HandleFunc("POST /users/login", h.UserHandler.Login)
 
 	// this routs for posts
-	// http.HandleFunc("/users", h.UserHandler.CreateUser)
+	http.HandleFunc("POST /posts", h.PostHandler.CreatePost)
 	// http.HandleFunc("/users/update", h.UserHandler.UpdateUser)
 	// http.HandleFunc("/users", h.UserHandler.ListUsers)
 
