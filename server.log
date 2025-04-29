@@ -1,7 +1,0 @@
-2025/04/29 17:55:35 2025-04-29T17:55:35+01:00 [Function: web-forum/internal/database.Migrate] [Line: 30] subqueries prohibited in generated columns
-2025/04/29 17:55:35 Failed to execute migration migrations/posts.sql: subqueries prohibited in generated columns
-2025/04/29 18:01:05 2025-04-29T18:01:05+01:00 [Function: web-forum/internal/database.Migrate] [Line: 30] table post_likes already exists
-2025/04/29 18:01:05 Failed to execute migration migrations/posts.sql: table post_likes already exists
-2025/04/29 18:01:55 2025-04-29T18:01:55+01:00 [Function: web-forum/internal/database.Migrate] [Line: 30] table post_likes already exists
-2025/04/29 18:01:55 Failed to execute migration migrations/posts.sql: table post_likes already exists
-2025/04/29 18:19:50 2025-04-29T18:19:50+01:00 [Function: web-forum/internal/handlers.(*PostHandler).CreatePost] [Line: 35] Title and content cannot be empty

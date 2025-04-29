@@ -7,6 +7,9 @@ import (
 )
 
 func SetupRoutes(h *app.Application) {
+	// the home route
+	http.HandleFunc("GET /", h.Home.Home)
+
 	// this route for user
 	http.HandleFunc("POST /users/register", h.UserHandler.CreateUser)
 	http.HandleFunc("POST /users/update", h.UserHandler.UpdateUser)
