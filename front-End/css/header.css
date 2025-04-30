@@ -1,0 +1,18 @@
+header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: var(--pading-10) var(--main-pading-side);
+}
+
+.navigation-links ul {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+
+  
+  background-color: rgba(255, 0, 0, 0);
+}
