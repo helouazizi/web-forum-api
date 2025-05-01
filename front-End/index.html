@@ -1,53 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="./css/style.css" />
+    <script defer type="module" src="./js/main.js"></script>
     <title>Forum</title>
-    <link rel="stylesheet" href="./css/style.css" /> <!-- Optional CSS file -->
-</head>
-<body>
+  </head>
+  <body>
     <header>
-        <h1 class="logo"><a href="/">Forum</a></h1>
-        <nav class="navigation-links">
-            <ul>
-                <li><a href="#">New Post</a></li>
-                <li><a href="#">Login</a></li>
-            </ul>
-        </nav>
+      <h1 class="logo"><a href="/front-End/index.html" >Forum</a></h1>
+      <nav class="navigation-links">
+        <ul>
+          <li>
+            <a href="#" class="primary-btn new_post_btn " id="new_post_btn"
+              ><i class="fas fa-plus"></i> <span>New Post</span></a
+            >
+          </li>
+          <li>
+            <a href="#" class="primary-btn" id="login_btn"
+              ><i class="fas fa-sign-in-alt"></i> Login</a
+            >
+          </li>
+        </ul>
+      </nav>
     </header>
 
     <main>
-        <section class="container">
-
-            <!-- slider to hold all active users profiles -->
+      <section class="container" id="container">
+        <!-- slider to hold all active users profiles
             <div class="slider">
               <div></div><div></div><div></div><div></div><div></div> <!-- Placeholder profile avatars -->
-            </div>
-        
-            <!-- left sidebar for filtering posts -->
-            <aside class="left-sidebar">
-              <h3>Filter</h3>
-              <p>Tags, categories, date, etc.</p>
-            </aside>
-        
-            <!-- section for displaying posts -->
-            <main class="posts">
-              <h2>Posts</h2>
-              <p>Here are the forum posts.</p>
-            </main>
-        
-            <!-- right sidebar for chat -->
-            <aside class="right-sidebar">
-              <h3>Chat</h3>
-              <p>Active conversations or messages.</p>
-            </aside>
-        
-          </section>
+        <!-- </div>  -->
+
+        <!-- section for displaying posts -->
+        <div class="posts">
+          <!-- POSTS  -->
+          <div class="post">
+            <h2>Post Title</h2>
+            <p class="meta">Posted by Username • April 30, 2025</p>
+            <p class="content">
+              This is a brief excerpt or content of the post...
+            </p>
+            <a href="#" class="read-more">Read More</a>
+          </div>
+          <div class="post">
+            <h2>Post Title</h2>
+            <p class="meta">Posted by Username • April 30, 2025</p>
+            <p class="content">
+              This is a brief excerpt or content of the post...
+            </p>
+            <a href="#" class="read-more">Read More</a>
+          </div>
+          <div class="post">
+            <h2>Post Title</h2>
+            <p class="meta">Posted by Username • April 30, 2025</p>
+            <p class="content">
+              This is a brief excerpt or content of the post...
+            </p>
+            <a href="#" class="read-more">Read More</a>
+          </div>
+          <div class="post">
+            <h2>Post Title</h2>
+            <p class="meta">Posted by Username • April 30, 2025</p>
+            <p class="content">
+              This is a brief excerpt or content of the post...
+            </p>
+            <a href="#" class="read-more">Read More</a>
+          </div>
+          <div class="post">
+            <h2>Post Title</h2>
+            <p class="meta">Posted by Username • April 30, 2025</p>
+            <p class="content">
+              This is a brief excerpt or content of the post...
+            </p>
+            <a href="#" class="read-more">Read More</a>
+          </div>
+        </div>
+      </section>
     </main>
 
     <footer>
-        <p>&copy; 2025 Forum. All rights reserved.</p>
+      <p>&copy; 2025 Forum. All rights reserved.</p>
     </footer>
-</body>
+  </body>
 </html>

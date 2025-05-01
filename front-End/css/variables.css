@@ -1,7 +1,7 @@
 :root {
     --primary-color:#201E43;
     --secondary-color : #134B70;
-    --third-color :#508C9B;
+    --third-color :#dadada;
     --text-color : #EEEEEE;
 
 
@@ -10,4 +10,18 @@
     --pading-10 : 10px;
     --gap: 1rem;
 
+
+    /* fonts */
+
+    --primary-font : 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+}
+
+
+.hidden{
+    display: none;
+}
+
+.show{
+    display: block;
 }

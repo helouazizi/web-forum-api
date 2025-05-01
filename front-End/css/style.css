@@ -1,6 +1,8 @@
 @import url("./variables.css");
 @import url("./header.css");
 @import url("container.css");
+@import url("footer.css");
+@import url("registraction.css");
 
 * {
     box-sizing: border-box;
@@ -14,7 +16,31 @@ a {
 li {
     list-style: none;
 }
+body {
+  background-color: var(--third-color);
+  overflow-y: scroll;
+  
+}
+main {
+  overflow-y: scroll; 
+  scrollbar-width: none; 
+  -ms-overflow-style: none; 
+}
+
+main::-webkit-scrollbar {
+  display: none; 
+}
+.primary-btn {
+  padding: 5px;
+  border-radius: 5px;
+  background-color: var(--secondary-color);
+}
 
 
-
+/* Body blur when modal is active */
+.modal-active {
+  filter: blur(5px);
+  pointer-events: none;
+  user-select: none;
+}
 
