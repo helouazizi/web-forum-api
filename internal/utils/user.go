@@ -32,10 +32,6 @@ func isReservedUsername(username string) bool {
 }
 
 func IsStrongPassword(password string) bool {
-	// // Ensure password is at least 6 characters long
-	// if len(password) <= 8 || len(password) >= 100 {
-	// 	return false
-	// }
 
 	hasLower := false
 	hasUpper := false
@@ -66,47 +62,3 @@ func HashPassWord(pass string) (string, error) {
 func ComparePass(hashed, pass []byte) error {
 	return bcrypt.CompareHashAndPassword(hashed, pass)
 }
-
-// func IsExist(table, collumn0, collumn1, value string) (string, bool) {
-// 	db, err := database.NewDatabase()
-// 	if err != nil {
-// 		logger.LogWithDetails(err)
-// 	}
-// 	// Check if the field exists in database sqlite3 in users table
-
-// 	var user, pass string
-// 	err = db.QueryRow("SELECT "+collumn0+collumn1+" FROM "+table+" WHERE  "+collumn0+"  = ?", value).Scan(&user, &pass)
-// 	if err != nil {
-// 		// logger.LogWithDetails(err)
-// 		if err == sql.ErrNoRows {
-// 			return pass, false
-// 		}
-// 	}
-
-// 	return pass, true
-// }
-
-// func IsCookieSet(r *http.Request, cookieName string) bool {
-// 	cookie, err := r.Cookie(cookieName)
-// 	if err != nil {
-// 		return false
-// 	}
-// 	if cookie.Value == "" {
-// 		return false
-// 	}
-// 	db, err := database.NewDatabase()
-// 	if err != nil {
-// 		logger.LogWithDetails(err)
-// 	}
-
-// 	// lets extract the token value from the cookie and compare it with the one we have in databse
-// 	var tokenExist bool
-// 	// lets extract the token from users table
-// 	// be care full with  no token
-// 	tokenErr := db.QueryRow("SELECT EXISTS (SELECT 1 FROM users WHERE token = $1)", cookie.Value).Scan(&tokenExist)
-// 	if tokenErr != nil || !tokenExist {
-// 		return false
-// 	}
-
-// 	return true
-// }
