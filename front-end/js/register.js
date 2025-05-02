@@ -24,15 +24,13 @@ function register() {
 
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
-
         setTimeout(() => {
           showMessage(data.Message);
         }, 2000);
         setTimeout(() => {
           showLoginForm();
         }, 1000);
-        
+
       } else {
         const errorData = await response.json();
         showRegisterForm(errorData);
