@@ -29,6 +29,10 @@
   animation: scaleUp 0.3s ease-out;
 }
 
+.modal-content span {
+  color: #ff4d4d;
+}
+
 .close-btn {
   position: absolute;
   top: 0.75rem;
@@ -144,6 +148,31 @@ textarea{
 .category-checkbox label:hover {
   background-color: var(--secondary-color);
 }
+
+
+
+#message_popup {
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #4CAF50; /* Green success */
+  color: white;
+  padding: 15px 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  z-index: 9999;
+  font-size: 1.2rem;
+  animation: fadeInOut 3s ease-in-out;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+  10% { opacity: 1; transform: translateX(-50%) translateY(0); }
+  90% { opacity: 1; transform: translateX(-50%) translateY(0); }
+  100% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+}
+
 
 
 

@@ -1,6 +1,13 @@
+import {
+  renderHomePage,
+  bindLoginBtn,
+  bindRegisterbtn,
+  showPostForm,
+} from "./dom.js";
 
-
-import { displayLoginForm,displayRegistrationForm ,displayPostForm} from "./dom.js"
-displayLoginForm()
-displayRegistrationForm()
-displayPostForm()
+document.addEventListener("DOMContentLoaded", () => {
+  renderHomePage();
+  bindLoginBtn();
+  bindRegisterbtn();
+  showPostForm();
+});

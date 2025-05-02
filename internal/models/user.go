@@ -32,3 +32,7 @@ type UserInputErrors struct {
 	FirstName string
 	Gender    string
 }
+
+type SuccesMessage struct {
+	Message string
+}

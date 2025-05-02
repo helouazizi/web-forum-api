@@ -31,9 +31,15 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// lets validate the user inputs
+	userError := utils.ValidateUserInputs(user)
+	if userError.HasError {
+		logger.LogWithDetails(fmt.Errorf("invalid user credentials"))
+		utils.RespondWithJSON(w, http.StatusBadRequest, userError)
+		return
+	}
 
-
-	createdUser, err := h.userService.CreateUser(user)
+	_, err := h.userService.CreateUser(user)
 	if err.Code != http.StatusCreated {
 		logger.LogWithDetails(fmt.Errorf(err.Message))
 		utils.RespondWithError(w, err)
@@ -41,7 +47,7 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// our response
-	utils.RespondWithJSON(w, http.StatusCreated, createdUser)
+	utils.RespondWithJSON(w, http.StatusCreated, models.SuccesMessage{Message: "Seccefully created your account"})
 }
 
 // func (h *UserHandler) UpdateUser(w http.ResponseWriter, r *http.Request) {

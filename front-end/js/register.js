@@ -1,3 +1,5 @@
+import { showRegisterForm, showLoginForm, showMessage } from "./dom.js";
+
 function register() {
   ///////////////
   const registerFormElement = document.getElementById("register_form_element");
@@ -6,9 +8,7 @@ function register() {
 
     const formData = new FormData(registerFormElement);
     const data = Object.fromEntries(formData.entries());
-    console.log(data);
-    data.age = parseInt(data.age)
-    
+    data.age = parseInt(data.age);
 
     try {
       const response = await fetch(
@@ -23,11 +23,19 @@ function register() {
       );
 
       if (response.ok) {
-        // Redirect to homepage
-        window.location.href = "/front-end/";
+        const data = await response.json();
+        console.log(data);
+
+        setTimeout(() => {
+          showMessage(data.Message);
+        }, 2000);
+        setTimeout(() => {
+          showLoginForm();
+        }, 1000);
+        
       } else {
         const errorData = await response.json();
-        alert("Registration failed: " + errorData.message);
+        showRegisterForm(errorData);
       }
     } catch (err) {
       alert("Error: " + err.message);
