@@ -8,7 +8,7 @@ type User struct {
 	FirstName string `json:"first_name"`
 	LastName  string `json:"last_name"`
 	Email     string `json:"email"`
-	Password   string `json:"password"` // hide in JSON
+	Password  string `json:"password"` // hide in JSON
 	// Bio               string    `json:"bio"`
 	// AvatarURL         string    `json:"avatar_url"`
 	// Role              string    `json:"role"`
@@ -20,4 +20,15 @@ type User struct {
 	// LastLoginAt       time.Time `json:"last_login_at,omitempty"`
 	// CreatedAt         time.Time `json:"created_at"`
 	// UpdatedAt         time.Time `json:"updated_at"`
+}
+
+type UserInputErrors struct {
+	HasError  bool
+	Nickname  string
+	Email     string
+	Pass      string
+	Age       string
+	LastName  string
+	FirstName string
+	Gender    string
 }

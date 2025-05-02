@@ -31,13 +31,7 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if user.Age < 0 || user.Age > 100 {
-		// logger.LogWithDetails(err1)
-		utils.RespondWithError(w, models.Error{Message: "Invalid age", Code: http.StatusBadRequest})
-		return
-	}
 
-	fmt.Println(user)
 
 	createdUser, err := h.userService.CreateUser(user)
 	if err.Code != http.StatusCreated {

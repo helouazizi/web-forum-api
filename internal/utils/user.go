@@ -5,18 +5,19 @@ import (
 	"regexp"
 	"slices"
 	"strings"
+	"web-forum/internal/models"
 
 	"golang.org/x/crypto/bcrypt"
 )
 
-func IsValidUsername(username string) bool {
+func ValidUsername(username string) bool {
 	// Example: Allow only alphanumeric characters and underscores
 	match, _ := regexp.MatchString("^[a-zA-Z0-9_]{3,50}$", username) // we can add length like {3,15} and remove the +
 	return match && !isReservedUsername(username)
 }
 
 // IsValidEmail checks if an email is syntactically valid using regex.
-func IsValidEmail(email string) bool {
+func ValidEmail(email string) bool {
 	email = strings.TrimSpace(email)
 	if email == "" {
 		return false
@@ -31,7 +32,7 @@ func isReservedUsername(username string) bool {
 	return slices.Contains(reservedWords, strings.ToLower(username))
 }
 
-func IsStrongPassword(password string) bool {
+func StrongPassword(password string) bool {
 
 	hasLower := false
 	hasUpper := false
@@ -61,4 +62,50 @@ func HashPassWord(pass string) (string, error) {
 
 func ComparePass(hashed, pass []byte) error {
 	return bcrypt.CompareHashAndPassword(hashed, pass)
+}
+
+// this function validate the user inputs
+
+func ValidateUserInputs(user models.User) models.UserInputErrors {
+	var userErrors models.UserInputErrors
+	// lets check the nickname first
+	if !ValidUsername(user.Nickname) {
+		userErrors.HasError = true
+		userErrors.Nickname = "Invalid Nickname"
+	}
+	// lets check the email
+	if !ValidEmail(user.Email) {
+		userErrors.HasError = true
+		userErrors.Email = "Invalid Email"
+	}
+
+	// lets check the pass
+	if !StrongPassword(user.Password) {
+		userErrors.HasError = true
+		userErrors.Pass = "Password is too weak"
+	}
+
+	// check the age
+	if user.Age < 1 || user.Age > 100 {
+		userErrors.HasError = true
+		userErrors.Age = "Invalid Age"
+	}
+
+	// check the gender
+	if user.Gender != "male" && user.Gender != "female" {
+		userErrors.HasError = true
+		userErrors.Gender = "Invalid Gender"
+	}
+
+	// check the last and first names
+	if user.LastName == "" {
+		userErrors.HasError = true
+		userErrors.LastName = "Invalid Lastname"
+	}
+	if user.FirstName == "" {
+		userErrors.HasError = true
+		userErrors.FirstName = "Invalid Firstname"
+	}
+
+	return userErrors
 }
