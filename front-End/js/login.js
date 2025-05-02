@@ -24,7 +24,7 @@ function login() {
             <div class="modal-content">
             <button class="close-btn" id="close-form">&times;</button>
                 <!-- Login Form -->
-            <form action="/login" method="POST">
+            <form action="/api/v1/login" method="POST">
             <h2><i class="fas fa-sign-in-alt"></i> Login</h2>
 
             <label for="login_id">Nickname or E-mail</label>
