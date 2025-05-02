@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 
+	middlewares "web-forum/internal/Middlewares"
 	"web-forum/internal/app"
 	"web-forum/internal/routers"
 	"web-forum/pkg/config"
@@ -17,11 +18,17 @@ func main() {
 		log.Fatal(err)
 	}
 	defer logger.Close()
+
 	configurations := config.LoadConfig()
 	application := app.NewApp(configurations)
-	routers.SetupRoutes(application)
+	mux := routers.SetupRoutes(application)
 	defer application.DB.Close()
 
-	fmt.Println("Server is running on http://localhost:8080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	addr := fmt.Sprintf(":%d", configurations.Port)
+	fmt.Printf("Server is running on http://localhost%s\n", addr)
+
+	// lets wrap our mux within the cors middleware to enable cors safty acces
+	log.Fatal(http.ListenAndServe(addr, middlewares.CORSMiddleware(mux)))
+
+	/// dont forgot to add garefuly shutdown server
 }

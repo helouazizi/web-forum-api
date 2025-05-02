@@ -27,9 +27,18 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 	var user models.User
 	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
 		logger.LogWithDetails(err)
-		utils.RespondWithError(w, models.Error{Message: "Inetrnal Server Error", Code: http.StatusInternalServerError})
+		utils.RespondWithError(w, models.Error{Message: "Bad Request", Code: http.StatusBadRequest})
 		return
 	}
+
+	if user.Age < 0 || user.Age > 100 {
+		// logger.LogWithDetails(err1)
+		utils.RespondWithError(w, models.Error{Message: "Invalid age", Code: http.StatusBadRequest})
+		return
+	}
+
+	fmt.Println(user)
+
 	createdUser, err := h.userService.CreateUser(user)
 	if err.Code != http.StatusCreated {
 		logger.LogWithDetails(fmt.Errorf(err.Message))
@@ -41,42 +50,42 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 	utils.RespondWithJSON(w, http.StatusCreated, createdUser)
 }
 
-func (h *UserHandler) UpdateUser(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		utils.RespondWithError(w, models.Error{Message: "Methos Not Allowed", Code: http.StatusMethodNotAllowed})
-		return
-	}
-	var user models.User
-	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
-		logger.LogWithDetails(err)
-		utils.RespondWithError(w, models.Error{Message: "Bad Request", Code: http.StatusBadRequest})
-		return
-	}
-	updatedUser, err := h.userService.UpdateUser(user)
-	if err.Code != http.StatusOK {
-		logger.LogWithDetails(fmt.Errorf(err.Message))
-		utils.RespondWithError(w, err)
-		return
-	}
-	utils.RespondWithJSON(w, http.StatusCreated, updatedUser)
-}
+// func (h *UserHandler) UpdateUser(w http.ResponseWriter, r *http.Request) {
+// 	if r.Method != http.MethodPost {
+// 		utils.RespondWithError(w, models.Error{Message: "Methos Not Allowed", Code: http.StatusMethodNotAllowed})
+// 		return
+// 	}
+// 	var user models.User
+// 	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
+// 		logger.LogWithDetails(err)
+// 		utils.RespondWithError(w, models.Error{Message: "Bad Request", Code: http.StatusBadRequest})
+// 		return
+// 	}
+// 	updatedUser, err := h.userService.UpdateUser(user)
+// 	if err.Code != http.StatusOK {
+// 		logger.LogWithDetails(fmt.Errorf(err.Message))
+// 		utils.RespondWithError(w, err)
+// 		return
+// 	}
+// 	utils.RespondWithJSON(w, http.StatusCreated, updatedUser)
+// }
 
-func (h *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		utils.RespondWithError(w, models.Error{Message: "Methos Not Allowed", Code: http.StatusMethodNotAllowed})
-		return
-	}
-	var user models.User
-	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
-		logger.LogWithDetails(err)
-		utils.RespondWithError(w, models.Error{Message: "Bad Request", Code: http.StatusBadRequest})
-		return
-	}
-	LogedUser, err := h.userService.Login(user)
-	if err.Code != http.StatusOK {
-		logger.LogWithDetails(fmt.Errorf(err.Message))
-		utils.RespondWithError(w, err)
-		return
-	}
-	utils.RespondWithJSON(w, http.StatusOK, LogedUser)
-}
+// func (h *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
+// 	if r.Method != http.MethodPost {
+// 		utils.RespondWithError(w, models.Error{Message: "Methos Not Allowed", Code: http.StatusMethodNotAllowed})
+// 		return
+// 	}
+// 	var user models.User
+// 	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
+// 		logger.LogWithDetails(err)
+// 		utils.RespondWithError(w, models.Error{Message: "Bad Request", Code: http.StatusBadRequest})
+// 		return
+// 	}
+// 	LogedUser, err := h.userService.Login(user)
+// 	if err.Code != http.StatusOK {
+// 		logger.LogWithDetails(fmt.Errorf(err.Message))
+// 		utils.RespondWithError(w, err)
+// 		return
+// 	}
+// 	utils.RespondWithJSON(w, http.StatusOK, LogedUser)
+// }

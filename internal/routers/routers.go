@@ -6,17 +6,19 @@ import (
 	"web-forum/internal/app"
 )
 
-func SetupRoutes(h *app.Application) {
+func SetupRoutes(h *app.Application) *http.ServeMux {
 	// the home route
-	http.HandleFunc("GET /", h.Home.Home)
+	mux := http.DefaultServeMux
+	mux.HandleFunc("/", h.Home.Home)
+	// http.HandleFunc("/", h.Home.Home)
 
 	// this route for user
-	http.HandleFunc("POST /api/v1/users/register", h.UserHandler.CreateUser)
-	http.HandleFunc("POST /users/update", h.UserHandler.UpdateUser)
-	http.HandleFunc("POST /api/v1/users/login", h.UserHandler.Login)
+	mux.HandleFunc("/api/v1/users/register", h.UserHandler.CreateUser)
+	// http.HandleFunc("POST /users/update", h.UserHandler.UpdateUser)
+	// http.HandleFunc("POST /api/v1/users/login", h.UserHandler.Login)
 
 	// this routs for posts
-	http.HandleFunc("POST /posts", h.PostHandler.CreatePost)
+	// http.HandleFunc("POST /posts", h.PostHandler.CreatePost)
 	// http.HandleFunc("/users/update", h.UserHandler.UpdateUser)
 	// http.HandleFunc("/users", h.UserHandler.ListUsers)
 
@@ -24,4 +26,6 @@ func SetupRoutes(h *app.Application) {
 	// http.HandleFunc("/users", h.UserHandler.CreateUser)
 	// http.HandleFunc("/users/update", h.UserHandler.UpdateUser)
 	// http.HandleFunc("/users", h.UserHandler.ListUsers)
+
+	return mux
 }

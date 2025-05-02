@@ -27,7 +27,7 @@ header {
   padding: 0;
 }
 
-.navigation-links a {
+.navigation-links button {
   text-decoration: none;
   border: none;
   cursor: pointer;
@@ -38,7 +38,7 @@ header {
   font-family: var(--primary-font);
 }
 
-.navigation-links a:hover {
+.navigation-links button:hover {
   background-color:  #ffffff ;
 }
 
