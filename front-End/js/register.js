@@ -24,7 +24,7 @@ function register() {
                 <div class="modal-content">
                 <button class="close-btn" id="close-form">&times;</button>
                     <!-- Login Form -->
-                <form action="/register" method="POST">
+                <form action="/api/v1/users/register" method="POST">
                 <h2><i class="fas fa-user-plus"></i> Register</h2>
                 
                 <label for="nickname">Nickname</label>
