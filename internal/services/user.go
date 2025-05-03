@@ -37,7 +37,6 @@ func (s *UserService) Login(user models.UserLogin) (models.UserLogin, models.Err
 
 func (s *UserService) GetUserInfo(token string) (models.User, models.Error) {
 	User, err := s.repo.GetUserInfo(token)
-
 	return User, err
 }
 

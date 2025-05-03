@@ -46,14 +46,11 @@ func (r *UserRepository) CreateUser(user models.User) (models.User, models.Error
 			UserErrors: models.UserInputErrors{HasError: false},
 		}
 	}
-	// this the token
-	token := uuid.New().String()
-
 	// Proceed to insert
 	query := `
 	INSERT INTO users (
-		nickname, age, gender, first_name, last_name, email, password_hash,session_token , created_at, updated_at ,session_expires_at
-	) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+		nickname, age, gender, first_name, last_name, email, password_hash , created_at, updated_at
+	) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ? )
 	`
 	result, err := r.db.Exec(query,
 		user.Nickname,
@@ -63,10 +60,8 @@ func (r *UserRepository) CreateUser(user models.User) (models.User, models.Error
 		user.LastName,
 		user.Email,
 		hashedPass,
-		token,
-		time.Now(),                   // created at
-		time.Now(),                   // updated at
-		time.Now().Add(24*time.Hour), // sesseion experition
+		time.Now(), // created at
+		time.Now(), // updated at
 	)
 	if err != nil {
 		logger.LogWithDetails(err)
@@ -102,7 +97,6 @@ func (r *UserRepository) Login(user models.UserLogin) (models.UserLogin, models.
 		query = fmt.Sprintf(`SELECT password_hash FROM users WHERE %s = ?`, "email")
 		Updatequery = fmt.Sprintf(`UPDATE users SET session_token = ?, session_expires_at = ? WHERE %s = ?`, "email")
 	}
-	fmt.Println(user, isEmail)
 
 	var hash string
 	err := r.db.QueryRow(query, user.LoginId).Scan(&hash)
@@ -115,7 +109,6 @@ func (r *UserRepository) Login(user models.UserLogin) (models.UserLogin, models.
 				Nickname: "Invalid nickname or email",
 			}}
 	}
-	// check password Nickname: "invalid nickname or email",HasError: true
 
 	errCompare := utils.ComparePass([]byte(hash), []byte(user.Password))
 	if errCompare != nil {
@@ -146,7 +139,6 @@ func (r *UserRepository) Login(user models.UserLogin) (models.UserLogin, models.
 	//  Set the token into user struct
 	user.SessionToken = newToken
 	// user.SessionExpiresAt = time.Now().Add(24 * time.Hour)
-
 	return user, models.Error{
 		Message: "Seccefully Loged in",
 		Code:    http.StatusOK,
@@ -156,11 +148,12 @@ func (r *UserRepository) Login(user models.UserLogin) (models.UserLogin, models.
 }
 
 func (r *UserRepository) GetUserInfo(token string) (models.User, models.Error) {
-	
+
 	var userInfo models.User
-	query := `SELECT (id,age,gender,first_name,last_name,nickname,email,created_at,updated_at) FROM users WHERE session_token = ?`
+	query := `SELECT id,age,gender,first_name,last_name,nickname,email,created_at,updated_at FROM users WHERE session_token = ?`
 	err := r.db.QueryRow(query, token).Scan(&userInfo.ID, &userInfo.Age, &userInfo.Gender, &userInfo.FirstName, &userInfo.LastName, &userInfo.Nickname, &userInfo.Email, &userInfo.CreatedAt, &userInfo.UpdatedAt)
 	if err != nil {
+		logger.LogWithDetails(err)
 		return models.User{}, models.Error{
 			Message: "Internal Server Error",
 			Code:    http.StatusInternalServerError,

@@ -47,7 +47,7 @@ function showLoginForm(errors) {
 }
 
 // this function dipay the registration form
- function bindRegisterbtn() {
+function bindRegisterbtn() {
   const register_btn = document.getElementById("register_btn");
 
   if (register_btn) {
@@ -78,7 +78,7 @@ function showRegisterForm(errors = {}) {
 }
 
 // this function diplay the craete post form
- function showPostForm() {
+function showPostForm() {
   const craete_post_btn = document.getElementById("craete_post_btn");
   if (craete_post_btn) {
     craete_post_btn.addEventListener("click", () => {
@@ -100,12 +100,20 @@ function showRegisterForm(errors = {}) {
   }
 }
 
+function getCookie(name) {
+  const match = document.cookie.match(new RegExp("(^| )" + name + "=([^;]+)"));
+  return match ? match[2] : null;
+}
+
 async function renderHomePage() {
-  // let token = getCookie("Token");
-  // console.log(token, "token");
-  let user = await isAouth();
-  console.log(user,"from dom")
-  
+  let user = await isAouth()
+  console.log(user,"from dom");
+
+  document.body.innerHTML = "";
+  document.getElementById("login_form")?.remove();
+  document.getElementById("register_form")?.remove();
+  document.getElementById("container")?.classList.remove("modal-active");
+
   document.body.appendChild(Header(user));
   let main = document.createElement("main");
   let section = document.createElement("section");

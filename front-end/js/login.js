@@ -1,6 +1,5 @@
 import { showLoginForm, renderHomePage } from "./dom.js";
-
-async function login() {
+function login() {
   const loginFormElement = document.getElementById("login_form_element");
   loginFormElement.addEventListener("submit", async (e) => {
     e.preventDefault(); // Stop regular form submission
@@ -16,18 +15,8 @@ async function login() {
         credentials: "include", // Very important
         body: JSON.stringify(data),
       });
-      console.log(response,"here resoonse");
-      
-
       if (response.ok) {
-        // const data = await response.json();
-        // console.log(data, "user.dta");
-        document.getElementById("login_form")?.remove();
-        await renderHomePage();
-      } else {
-        const errorData = await response.json();
-        console.log(errorData, "eeeeeeeeeeee");
-        showLoginForm(errorData);
+        renderHomePage();
       }
     } catch (err) {
       alert("Error: " + err.message);

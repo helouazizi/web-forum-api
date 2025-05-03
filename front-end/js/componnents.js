@@ -1,4 +1,4 @@
-let Header = (user) => {
+let Header = (user) => {  
   let header = document.createElement("header");
   if (user) {
     header.innerHTML = `

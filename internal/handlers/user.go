@@ -97,12 +97,12 @@ func (h *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
 		utils.RespondWithJSON(w, http.StatusBadRequest, err)
 		return
 	}
-	// After successful login, set the cookie
-	cookie := &http.Cookie{Name: "Token", Value: LogedUser.SessionToken, MaxAge: 3600, HttpOnly: false, SameSite: http.SameSiteStrictMode, Path: "/front-end/"}
 
+	// After successful login, set the cookie
+	cookie := &http.Cookie{Name: "Token", Value: LogedUser.SessionToken, MaxAge: 3600, HttpOnly: true, SameSite: http.SameSiteStrictMode, Path: "/",Secure:   false,}
 	http.SetCookie(w, cookie)
 
-	utils.RespondWithJSON(w, http.StatusOK, LogedUser)
+	utils.RespondWithJSON(w, http.StatusOK, models.SuccesMessage{Message: "Seccefuly loged in"})
 }
 
 func (h *UserHandler) GetUserInfo(w http.ResponseWriter, r *http.Request) {
@@ -110,16 +110,17 @@ func (h *UserHandler) GetUserInfo(w http.ResponseWriter, r *http.Request) {
 		utils.RespondWithError(w, models.Error{Message: "Methos Not Allowed", Code: http.StatusMethodNotAllowed})
 		return
 	}
-	token := ""
 	cookie, err := r.Cookie("Token")
-	if err == nil {
-		token = cookie.Value
+	if err != nil {
+		logger.LogWithDetails(err)
+		utils.RespondWithJSON(w, http.StatusTemporaryRedirect, models.Error{Message: "No token Yet",Code: http.StatusTemporaryRedirect})
+		return
 	}
-	fmt.Println(token,"tokeen")
+	token := cookie.Value
 	userInfo, err1 := h.userService.GetUserInfo(token)
 	if err1.Code != http.StatusOK {
 		logger.LogWithDetails(fmt.Errorf(err1.Message))
-		utils.RespondWithJSON(w, http.StatusBadRequest, err1)
+		utils.RespondWithJSON(w, http.StatusTemporaryRedirect, models.Error{Message: "No token Yet",Code: http.StatusTemporaryRedirect})
 		return
 	}
 	utils.RespondWithJSON(w, http.StatusOK, userInfo)
