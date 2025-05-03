@@ -16,6 +16,8 @@ import (
 type UserMethods interface {
 	CreateUser(user models.User) (models.User, models.Error)
 	Login(user models.UserLogin) (models.UserLogin, models.Error)
+	Logout(token string) (models.Error)
+
 	//UpdateUser(user models.User) (models.User, models.Error)
 	GetUserInfo(token string) (models.User, models.Error)
 	IsUsernameOrEmailTaken(username, email string) models.Error
@@ -170,15 +172,15 @@ func (r *UserRepository) GetUserInfo(token string) (models.User, models.Error) {
 		}}
 }
 
-// func (r *UserRepository) Logout(userID int) models.Error {
-// 	query := `UPDATE users SET session_token = NULL, session_expires_at = NULL WHERE id = ?`
-// 	_, err := r.db.Exec(query, userID)
-// 	if err != nil {
-// 		logger.LogWithDetails(err)
-// 		return models.Error{Message: "Internal server error", Code: http.StatusInternalServerError}
-// 	}
-// 	return models.Error{Message: "Successfully logged out", Code: http.StatusOK}
-// }
+func (r *UserRepository) Logout(token string) models.Error {
+	query := `UPDATE users SET session_token = NULL, session_expires_at = NULL WHERE session_token = ?`
+	_, err := r.db.Exec(query, token)
+	if err != nil {
+		logger.LogWithDetails(err)
+		return models.Error{Message: "Internal server error", Code: http.StatusInternalServerError}
+	}
+	return models.Error{Message: "Successfully logged out", Code: http.StatusOK}
+}
 
 // func (r *UserRepository) UpdateUser(user models.User) (models.User, models.Error) {
 

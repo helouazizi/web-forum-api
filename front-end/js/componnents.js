@@ -1,23 +1,21 @@
-let Header = (user) => {  
+let Header = (user) => {
   let header = document.createElement("header");
   if (user) {
     header.innerHTML = `
         <h1 class="logo"><a href="/front-end/">Forum</a></h1>
         <nav class="navigation-links">
-              <button class="primary-btn new_post_btn" id="craete_post_btn"><i class="fas fa-plus"></i> <span>New Post</span></button>
+              <button class="primary-btn new_post_btn" id="craete_post_btn"><i class="fas fa-plus"></i><span>New Post</span></button>
               <div class="user-profile " id="user-profile" >
                 <img
                   src="./assets/avatar.png"
                   alt="User Profile"
                   class="profile-pic"
                 />
-                <div class="user-info">
-                  <h4 class="nickname">John Doe</h4>
-                  <span class="post-date">2025-05-02</span>
-                </div>
               </div>
         </nav>
+        
     `;
+    header.appendChild(userProfile(user))
   } else {
     header.innerHTML = `
           <h1 class="logo"><a href="/front-end/">Forum</a></h1>
@@ -28,6 +26,40 @@ let Header = (user) => {
   }
 
   return header;
+};
+
+let userProfile = (user) => {
+  let underProfile = document.createElement("div");
+  underProfile.setAttribute("class", "hidden underProfile");
+  underProfile.setAttribute("id", "underProfile");
+  underProfile.innerHTML = `
+                <div class="upInfo">
+                   <div class="" id="" >
+                      <img
+                        src="./assets/avatar.png"
+                        alt="User Profile"
+                        class="profile-pic"
+                      />
+                      <h2>${user.nickname}</h2>
+                   </div>
+                   <div>
+                   <span>${user.email}</span>
+                   <span>${user.first_name}</span>
+                   <span>${user.last_name}</span>
+                   <span>${user.gender}</span>
+                   <span>${user.age}</span>
+                   </div> 
+                </div>
+                <div class="midleInfo"> 
+                  <h2>liked Posts</h2>
+                </div>
+                <div class="buttomInfo"> 
+                <button class="primary-btn" id="settings">Settings</button> 
+                <button class="primary-btn" id="log_out">Log Out</button>
+                </div>      
+            `;
+
+  return underProfile;
 };
 
 let loginForm = (errrors = {}) => {

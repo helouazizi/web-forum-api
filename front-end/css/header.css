@@ -22,6 +22,7 @@ header {
 .navigation-links {
   list-style: none;
   display: flex;
+  align-items: center;
   gap: 1.5rem;
   margin: 0;
   padding: 0;
@@ -32,23 +33,30 @@ header {
   border: none;
   cursor: pointer;
   color: var(--primary-color);
-  background-color:  var(--secondary-color);
+  background-color: var(--secondary-color);
   font-size: 1rem;
   transition: color 0.3s ease;
   font-family: var(--primary-font);
+  height: fit-content;
 }
 
 .navigation-links button:hover {
-  background-color:  #ffffff ;
+  background-color: #ffffff;
 }
 
-.user-profile{
-  display: contents;
+.user-profile {
+  display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
 }
 
-
+#underProfile{
+  position: absolute;
+  top: 100%;
+  background-color: cadetblue;
+  left: 0;
+}
 
 /* 425 */
 
@@ -64,7 +72,7 @@ header {
     cursor: pointer;
     transition: background-color 0.3s ease;
     z-index: 1000;
-    span{
+    span {
       display: none;
     }
     i {

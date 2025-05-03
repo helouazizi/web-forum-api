@@ -9,7 +9,7 @@ import {
   Footer,
 } from "./componnents.js";
 
-import { isAouth } from "./api.js";
+import { isAouth, logOut } from "./api.js";
 
 // this function diplay the login form
 function bindLoginBtn() {
@@ -106,8 +106,8 @@ function getCookie(name) {
 }
 
 async function renderHomePage() {
-  let user = await isAouth()
-  console.log(user,"from dom");
+  let user = await isAouth();
+  console.log(user, "from dom");
 
   document.body.innerHTML = "";
   document.getElementById("login_form")?.remove();
@@ -115,6 +115,11 @@ async function renderHomePage() {
   document.getElementById("container")?.classList.remove("modal-active");
 
   document.body.appendChild(Header(user));
+  if (user) {
+    showProfile();
+    
+  }
+  logOut();
   let main = document.createElement("main");
   let section = document.createElement("section");
   section.setAttribute("class", "container");
@@ -140,6 +145,16 @@ function showMessage(message) {
   setTimeout(() => {
     popup.remove();
   }, 3000);
+}
+
+function showProfile() {
+  let userProfile = document.getElementById("user-profile");
+  if (userProfile) {
+    userProfile.addEventListener("click", () => {
+      let underProfile = document.getElementById("underProfile");
+      underProfile.classList.toggle("hidden");
+    });
+  }
 }
 
 export {
