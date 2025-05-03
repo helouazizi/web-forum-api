@@ -1,0 +1,5 @@
+2025/05/03 02:16:45 2025-05-03T02:16:45+01:00 [Function: web-forum/internal/handlers.(*UserHandler).Login] [Line: 80] invalid character 'l' looking for beginning of value
+2025/05/03 02:22:28 2025-05-03T02:22:28+01:00 [Function: web-forum/internal/handlers.(*UserHandler).Login] [Line: 80] invalid character 'l' looking for beginning of value
+2025/05/03 02:23:32 2025-05-03T02:23:32+01:00 [Function: web-forum/internal/handlers.(*UserHandler).Login] [Line: 87] invalid nickname or email
+2025/05/03 02:24:55 2025-05-03T02:24:55+01:00 [Function: web-forum/internal/handlers.(*UserHandler).Login] [Line: 87] invalid nickname or email
+2025/05/03 02:28:41 2025-05-03T02:28:41+01:00 [Function: web-forum/internal/handlers.(*UserHandler).Login] [Line: 87] invalid nickname or email

@@ -44,3 +44,12 @@ main::-webkit-scrollbar {
   user-select: none;
 }
 
+
+.hidden {
+  display: none;
+}
+
+.show {
+  display: flex;
+}
+

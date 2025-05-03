@@ -19,7 +19,7 @@ header {
   font-family: var(--primary-font);
 }
 
-.navigation-links ul {
+.navigation-links {
   list-style: none;
   display: flex;
   gap: 1.5rem;
@@ -41,6 +41,14 @@ header {
 .navigation-links button:hover {
   background-color:  #ffffff ;
 }
+
+.user-profile{
+  display: contents;
+  align-items: center;
+  justify-content: center;
+}
+
+
 
 /* 425 */
 

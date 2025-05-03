@@ -2,6 +2,8 @@
 package utils
 
 import (
+	"fmt"
+	"net/http"
 	"regexp"
 	"slices"
 	"strings"
@@ -108,4 +110,22 @@ func ValidateUserInputs(user models.User) models.UserInputErrors {
 	}
 
 	return userErrors
+}
+
+func ProtectedHandler(w http.ResponseWriter, r *http.Request) {
+	cookie, err := r.Cookie("session_token")
+	if err != nil {
+		if err == http.ErrNoCookie {
+			// No cookie found — unauthorized
+			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+			return
+		}
+		// Other error
+		http.Error(w, "Bad Request", http.StatusBadRequest)
+		return
+	}
+
+	token := cookie.Value
+	// Now you can use the token (e.g., validate it)
+	fmt.Fprintf(w, "Your session token is: %s", token)
 }

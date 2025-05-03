@@ -3,14 +3,19 @@ let Header = () => {
   header.innerHTML = `
      <h1 class="logo"><a href="/front-end/">Forum</a></h1>
       <nav class="navigation-links">
-        <ul>
-          <li>
             <button class="primary-btn new_post_btn" id="craete_post_btn"><i class="fas fa-plus"></i> <span>New Post</span></button>
-          </li>
-          <li>
             <button class="primary-btn" id="login_btn"><i class="fas fa-sign-in-alt"></i> Login</button>
-          </li>
-        </ul>
+            <div class="user-profile hidden" id="user-profile" >
+              <img
+                src="./assets/avatar.png"
+                alt="User Profile"
+                class="profile-pic"
+              />
+              <div class="user-info">
+                <h4 class="nickname">John Doe</h4>
+                <span class="post-date">2025-05-02</span>
+              </div>
+            </div>
       </nav>
   `;
   return header;
@@ -24,7 +29,7 @@ let loginForm = () => {
                 <div class="modal-content">
                 <button class="close-btn" id="close-form">&times;</button>
                     <!-- Login Form -->
-                <form action="/api/v1/users/login" method="POST" id="login_form_element">
+                <form action="http://localhost:3000/api/v1/users/login" method="POST" id="login_form_element">
                 <h2><i class="fas fa-sign-in-alt"></i> Login</h2>
     
                 <label for="login_id">Nickname or E-mail</label>
@@ -106,7 +111,7 @@ let postCard = () => {
   post.innerHTML = `
             <div class="post-header">
               <img
-                src="path/to/user-profile.jpg"
+                src="./assets/avatar.png"
                 alt="User Profile"
                 class="profile-pic"
               />

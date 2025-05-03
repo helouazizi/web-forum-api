@@ -15,7 +15,7 @@ import (
 
 type UserMethods interface {
 	CreateUser(user models.User) (models.User, models.Error)
-	//Login(user models.User) (models.User, models.Error)
+	Login(user models.UserLogin) (models.UserLogin, models.Error)
 	//UpdateUser(user models.User) (models.User, models.Error)
 	IsUsernameOrEmailTaken(username, email string) models.Error
 }
@@ -96,47 +96,54 @@ func (r *UserRepository) CreateUser(user models.User) (models.User, models.Error
 	}
 }
 
-// func (r *UserRepository) Login(user models.User) (models.User, models.Error) {
-// 	// check username existence
-// 	err := r.IsUsernameOrEmailTaken(user.Username, user.Email)
-// 	if err.Code == http.StatusOK {
-// 		logger.LogWithDetails(fmt.Errorf(err.Message))
-// 		return models.User{}, models.Error{Message: "Invalid username or password", Code: http.StatusBadRequest}
-// 	}
+func (r *UserRepository) Login(user models.UserLogin) (models.UserLogin, models.Error) {
+	// // check username existence
+	// err := r.IsUsernameOrEmailTaken(user.Nickname, user.Email)
+	// if err.Code != http.StatusOK {
+	// 	logger.LogWithDetails(fmt.Errorf(err.Message))
+	// 	return models.User{}, models.Error{Message: "Invalid username or password", Code: http.StatusBadRequest}
+	// }
+	query := `SELECT password_hash FROM users WHERE nickname = ?`
+	Updatequery := `UPDATE users SET session_token = ?, session_expires_at = ? WHERE nickname = ?`
+	isEmail := utils.ValidEmail(user.LoginId)
+	if isEmail {
+		query = fmt.Sprintf(`SELECT password_hash FROM users WHERE %s = ?`, "email")
+		Updatequery = fmt.Sprintf(`UPDATE users SET session_token = ?, session_expires_at = ? WHERE %s = ?`, "email")
+	}
+	fmt.Println(user, isEmail)
 
-// 	// check password
-// 	hash, errSelect := r.SelectFromDB("password_hash", "users", user.Username)
-// 	if errSelect.Code != http.StatusFound {
-// 		logger.LogWithDetails(fmt.Errorf(errSelect.Message))
-// 		return models.User{}, models.Error{Message: "Invalid username or password", Code: http.StatusBadRequest}
-// 	}
+	var hash string
+	err := r.db.QueryRow(query, user.LoginId).Scan(&hash)
+	if err != nil {
+		return models.UserLogin{}, models.Error{Message: "invalid nickname or email"}
+	}
+	// check password
 
-// 	errCompare := utils.ComparePass([]byte(hash), []byte(user.PasswordHash))
-// 	if errCompare != nil {
-// 		logger.LogWithDetails(errCompare)
-// 		return models.User{}, models.Error{Message: "Invalid username or password", Code: http.StatusBadRequest}
-// 	}
+	errCompare := utils.ComparePass([]byte(hash), []byte(user.Password))
+	if errCompare != nil {
+		logger.LogWithDetails(errCompare)
+		return models.UserLogin{}, models.Error{Message: "Invalid nickname or password", Code: http.StatusBadRequest}
+	}
 
-// 	// Generate a new token
-// 	newToken := uuid.New().String()
+	// Generate a new token
+	newToken := uuid.New().String()
 
-// 	//  Update the token in database
-// 	query := `UPDATE users SET session_token = ?, session_expires_at = ? WHERE username = ?`
-// 	_, errUpdate := r.db.Exec(query, newToken, time.Now().Add(24*time.Hour), user.Username) // expires after 24h
-// 	if errUpdate != nil {
-// 		logger.LogWithDetails(errUpdate)
-// 		return models.User{}, models.Error{Message: "Internal server error", Code: http.StatusInternalServerError}
-// 	}
+	//  Update the token in database
+	_, errUpdate := r.db.Exec(Updatequery, newToken, time.Now().Add(24*time.Hour), user.LoginId) // expires after 24h
+	if errUpdate != nil {
+		logger.LogWithDetails(errUpdate)
+		return models.UserLogin{}, models.Error{Message: "Internal server error", Code: http.StatusInternalServerError}
+	}
 
-// 	//  Set the token into user struct
-// 	user.SessionToken = newToken
-// 	user.SessionExpiresAt = time.Now().Add(24 * time.Hour)
+	//  Set the token into user struct
+	user.SessionToken = newToken
+	// user.SessionExpiresAt = time.Now().Add(24 * time.Hour)
 
-// 	return user, models.Error{
-// 		Message: "Successfully logged in",
-// 		Code:    http.StatusOK,
-// 	}
-// }
+	return user, models.Error{
+		Message: "Successfully logged in",
+		Code:    http.StatusOK,
+	}
+}
 
 // func (r *UserRepository) Logout(userID int) models.Error {
 // 	query := `UPDATE users SET session_token = NULL, session_expires_at = NULL WHERE id = ?`

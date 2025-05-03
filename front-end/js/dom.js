@@ -1,5 +1,5 @@
 import { register } from "./register.js";
-// import { login } from "./login.js";
+import { login } from "./login.js";
 import {
   registerForm,
   loginForm,
@@ -33,7 +33,7 @@ function showLoginForm() {
   document.body.appendChild(form);
 
   bindRegisterbtn();
- 
+  login();
   /////////////////// handle the form caancling
   const close_btn = document.getElementById("close-form");
   close_btn.addEventListener("click", () => {
@@ -51,7 +51,7 @@ function bindRegisterbtn() {
     });
   }
 }
-function showRegisterForm(errors={}) {
+function showRegisterForm(errors = {}) {
   const container = document.getElementById("container");
   container.classList.add("modal-active");
   // remove the previouse form
@@ -110,9 +110,9 @@ function renderHomePage() {
   document.body.appendChild(Footer());
 }
 
-function showMessage(message) {  
-  const popup = document.createElement('div');
-  popup.setAttribute('id', 'message_popup');
+function showMessage(message) {
+  const popup = document.createElement("div");
+  popup.setAttribute("id", "message_popup");
   popup.innerHTML = `<h2>${message}</h2>`;
   document.body.appendChild(popup);
 
@@ -122,7 +122,6 @@ function showMessage(message) {
   }, 3000);
 }
 
-
 export {
   renderHomePage,
   showLoginForm,
@@ -130,5 +129,5 @@ export {
   showPostForm,
   bindRegisterbtn,
   bindLoginBtn,
-  showMessage
+  showMessage,
 };

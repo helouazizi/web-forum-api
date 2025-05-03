@@ -70,22 +70,33 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 // 	utils.RespondWithJSON(w, http.StatusCreated, updatedUser)
 // }
 
-// func (h *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
-// 	if r.Method != http.MethodPost {
-// 		utils.RespondWithError(w, models.Error{Message: "Methos Not Allowed", Code: http.StatusMethodNotAllowed})
-// 		return
-// 	}
-// 	var user models.User
-// 	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
-// 		logger.LogWithDetails(err)
-// 		utils.RespondWithError(w, models.Error{Message: "Bad Request", Code: http.StatusBadRequest})
-// 		return
-// 	}
-// 	LogedUser, err := h.userService.Login(user)
-// 	if err.Code != http.StatusOK {
-// 		logger.LogWithDetails(fmt.Errorf(err.Message))
-// 		utils.RespondWithError(w, err)
-// 		return
-// 	}
-// 	utils.RespondWithJSON(w, http.StatusOK, LogedUser)
-// }
+func (h *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		utils.RespondWithError(w, models.Error{Message: "Methos Not Allowed", Code: http.StatusMethodNotAllowed})
+		return
+	}
+	var user models.UserLogin
+	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
+		logger.LogWithDetails(err)
+		utils.RespondWithError(w, models.Error{Message: "Bad Request", Code: http.StatusBadRequest})
+		return
+	}
+
+	LogedUser, err := h.userService.Login(user)
+	if err.Code != http.StatusOK {
+		logger.LogWithDetails(fmt.Errorf(err.Message))
+		utils.RespondWithJSON(w, http.StatusBadRequest,models.UserInputErrors{Pass: "invalid nickname or password"})
+		return
+	}
+	 // After successful login, set the cookie
+	 http.SetCookie(w, &http.Cookie{
+        Name:     "session_token",
+        Value:    user.SessionToken,
+        Path:     "/front-end/",
+        HttpOnly: true,
+        MaxAge:   3600,
+        Secure:   false, // Set to true if using HTTPS
+        SameSite: http.SameSiteLaxMode,
+    })
+	utils.RespondWithJSON(w, http.StatusOK, LogedUser)
+}

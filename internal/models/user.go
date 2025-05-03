@@ -15,11 +15,17 @@ type User struct {
 	// IsActive          bool      `json:"is_active"`
 	// EmailVerified     bool      `json:"email_verified"`
 	// VerificationToken string    `json:"verification_token,omitempty"`
-	// SessionToken      string    `json:"session_token,omitempty"`
+	// SessionToken string `json:"session_token,omitempty"`
 	// SessionExpiresAt  time.Time `json:"session_expires_at,omitempty"`
 	// LastLoginAt       time.Time `json:"last_login_at,omitempty"`
 	// CreatedAt         time.Time `json:"created_at"`
 	// UpdatedAt         time.Time `json:"updated_at"`
+}
+
+type UserLogin struct {
+	LoginId      string `json:"login_id"`
+	Password     string `json:"password"`
+	SessionToken string
 }
 
 type UserInputErrors struct {
