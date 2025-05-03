@@ -1,5 +1,12 @@
-2025/05/03 02:16:45 2025-05-03T02:16:45+01:00 [Function: web-forum/internal/handlers.(*UserHandler).Login] [Line: 80] invalid character 'l' looking for beginning of value
-2025/05/03 02:22:28 2025-05-03T02:22:28+01:00 [Function: web-forum/internal/handlers.(*UserHandler).Login] [Line: 80] invalid character 'l' looking for beginning of value
-2025/05/03 02:23:32 2025-05-03T02:23:32+01:00 [Function: web-forum/internal/handlers.(*UserHandler).Login] [Line: 87] invalid nickname or email
-2025/05/03 02:24:55 2025-05-03T02:24:55+01:00 [Function: web-forum/internal/handlers.(*UserHandler).Login] [Line: 87] invalid nickname or email
-2025/05/03 02:28:41 2025-05-03T02:28:41+01:00 [Function: web-forum/internal/handlers.(*UserHandler).Login] [Line: 87] invalid nickname or email
+2025/05/03 15:30:59 2025-05-03T15:30:59+01:00 [Function: web-forum/internal/handlers.(*UserHandler).GetUserInfo] [Line: 122] Internal Server Error
+2025/05/03 15:31:04 2025-05-03T15:31:04+01:00 [Function: web-forum/internal/handlers.(*UserHandler).GetUserInfo] [Line: 122] Internal Server Error
+2025/05/03 15:31:10 2025-05-03T15:31:10+01:00 [Function: web-forum/internal/handlers.(*UserHandler).GetUserInfo] [Line: 122] Internal Server Error
+2025/05/03 15:36:01 2025-05-03T15:36:01+01:00 [Function: web-forum/internal/handlers.(*UserHandler).GetUserInfo] [Line: 122] Internal Server Error
+2025/05/03 15:37:10 2025-05-03T15:37:10+01:00 [Function: web-forum/internal/handlers.(*UserHandler).GetUserInfo] [Line: 122] Internal Server Error
+2025/05/03 15:39:05 2025-05-03T15:39:05+01:00 [Function: web-forum/internal/handlers.(*UserHandler).GetUserInfo] [Line: 122] Internal Server Error
+2025/05/03 15:42:03 2025-05-03T15:42:03+01:00 [Function: web-forum/internal/handlers.(*UserHandler).GetUserInfo] [Line: 122] Internal Server Error
+2025/05/03 15:42:20 2025-05-03T15:42:20+01:00 [Function: web-forum/internal/handlers.(*UserHandler).Login] [Line: 92] Bad Request
+2025/05/03 15:43:31 2025-05-03T15:43:31+01:00 [Function: web-forum/internal/handlers.(*UserHandler).GetUserInfo] [Line: 122] Internal Server Error
+2025/05/03 15:44:55 2025-05-03T15:44:55+01:00 [Function: web-forum/internal/handlers.(*UserHandler).GetUserInfo] [Line: 121] Internal Server Error
+2025/05/03 15:51:11 2025-05-03T15:51:11+01:00 [Function: web-forum/internal/handlers.(*UserHandler).GetUserInfo] [Line: 121] Internal Server Error
+2025/05/03 15:51:43 2025-05-03T15:51:43+01:00 [Function: web-forum/internal/handlers.(*UserHandler).GetUserInfo] [Line: 121] Internal Server Error

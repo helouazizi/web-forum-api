@@ -38,9 +38,13 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 		utils.RespondWithJSON(w, http.StatusBadRequest, userError)
 		return
 	}
-
 	_, err := h.userService.CreateUser(user)
 	if err.Code != http.StatusCreated {
+		if err.UserErrors.HasError {
+			logger.LogWithDetails(fmt.Errorf(err.Message))
+			utils.RespondWithJSON(w, err.Code, err.UserErrors)
+			return
+		}
 		logger.LogWithDetails(fmt.Errorf(err.Message))
 		utils.RespondWithError(w, err)
 		return
@@ -84,19 +88,39 @@ func (h *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
 
 	LogedUser, err := h.userService.Login(user)
 	if err.Code != http.StatusOK {
+		if err.UserErrors.HasError {
+			logger.LogWithDetails(fmt.Errorf(err.Message))
+			utils.RespondWithJSON(w, http.StatusBadRequest, err.UserErrors)
+			return
+		}
 		logger.LogWithDetails(fmt.Errorf(err.Message))
-		utils.RespondWithJSON(w, http.StatusBadRequest,models.UserInputErrors{Pass: "invalid nickname or password"})
+		utils.RespondWithJSON(w, http.StatusBadRequest, err)
 		return
 	}
-	 // After successful login, set the cookie
-	 http.SetCookie(w, &http.Cookie{
-        Name:     "session_token",
-        Value:    user.SessionToken,
-        Path:     "/front-end/",
-        HttpOnly: true,
-        MaxAge:   3600,
-        Secure:   false, // Set to true if using HTTPS
-        SameSite: http.SameSiteLaxMode,
-    })
+	// After successful login, set the cookie
+	cookie := &http.Cookie{Name: "Token", Value: LogedUser.SessionToken, MaxAge: 3600, HttpOnly: false, SameSite: http.SameSiteStrictMode, Path: "/front-end/"}
+
+	http.SetCookie(w, cookie)
+
 	utils.RespondWithJSON(w, http.StatusOK, LogedUser)
+}
+
+func (h *UserHandler) GetUserInfo(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		utils.RespondWithError(w, models.Error{Message: "Methos Not Allowed", Code: http.StatusMethodNotAllowed})
+		return
+	}
+	token := ""
+	cookie, err := r.Cookie("Token")
+	if err == nil {
+		token = cookie.Value
+	}
+	fmt.Println(token,"tokeen")
+	userInfo, err1 := h.userService.GetUserInfo(token)
+	if err1.Code != http.StatusOK {
+		logger.LogWithDetails(fmt.Errorf(err1.Message))
+		utils.RespondWithJSON(w, http.StatusBadRequest, err1)
+		return
+	}
+	utils.RespondWithJSON(w, http.StatusOK, userInfo)
 }

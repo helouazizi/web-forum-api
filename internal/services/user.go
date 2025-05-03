@@ -1,8 +1,6 @@
 package services
 
 import (
-	"net/http"
-
 	"web-forum/internal/models"
 	"web-forum/internal/repository"
 )
@@ -17,9 +15,7 @@ func NewUserService(repo repository.UserMethods) *UserService {
 
 func (s *UserService) CreateUser(user models.User) (models.User, models.Error) {
 	User, err := s.repo.CreateUser(user)
-	if err.Code != http.StatusCreated {
-		return models.User{}, err
-	}
+
 	return User, err
 }
 
@@ -35,9 +31,13 @@ func (s *UserService) CreateUser(user models.User) (models.User, models.Error) {
 //	}
 func (s *UserService) Login(user models.UserLogin) (models.UserLogin, models.Error) {
 	User, err := s.repo.Login(user)
-	if err.Code != http.StatusOK {
-		return models.UserLogin{}, err
-	}
+
+	return User, err
+}
+
+func (s *UserService) GetUserInfo(token string) (models.User, models.Error) {
+	User, err := s.repo.GetUserInfo(token)
+
 	return User, err
 }
 

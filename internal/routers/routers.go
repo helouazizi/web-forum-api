@@ -15,8 +15,8 @@ func SetupRoutes(h *app.Application) *http.ServeMux {
 	// this route for user
 	mux.HandleFunc("/api/v1/users/register", h.UserHandler.CreateUser)
 	// http.HandleFunc("POST /users/update", h.UserHandler.UpdateUser)
-	http.HandleFunc("POST /api/v1/users/login", h.UserHandler.Login)
-
+	http.HandleFunc("/api/v1/users/login", h.UserHandler.Login)
+	http.HandleFunc("/api/v1/users/info", h.UserHandler.GetUserInfo)
 	// this routs for posts
 	// http.HandleFunc("POST /posts", h.PostHandler.CreatePost)
 	// http.HandleFunc("/users/update", h.UserHandler.UpdateUser)

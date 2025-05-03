@@ -9,6 +9,8 @@ import {
   Footer,
 } from "./componnents.js";
 
+import { isAouth } from "./api.js";
+
 // this function diplay the login form
 function bindLoginBtn() {
   const login_btn = document.getElementById("login_btn");
@@ -17,18 +19,20 @@ function bindLoginBtn() {
   if (login_btn_1) {
     result_btn = login_btn_1;
   }
-  result_btn.addEventListener("click", (e) => {
-    showLoginForm();
-  });
+  if (result_btn) {
+    result_btn.addEventListener("click", (e) => {
+      showLoginForm();
+    });
+  }
 }
-function showLoginForm() {
+function showLoginForm(errors) {
   const container = document.getElementById("container");
   container.classList.add("modal-active");
 
   // remove the previouse form
   document.getElementById("login_form")?.remove();
   document.getElementById("register_form")?.remove();
-  let form = loginForm();
+  let form = loginForm(errors);
   form.classList.add("active");
   document.body.appendChild(form);
 
@@ -43,8 +47,9 @@ function showLoginForm() {
 }
 
 // this function dipay the registration form
-function bindRegisterbtn() {
+ function bindRegisterbtn() {
   const register_btn = document.getElementById("register_btn");
+
   if (register_btn) {
     register_btn.addEventListener("click", (e) => {
       showRegisterForm();
@@ -73,28 +78,35 @@ function showRegisterForm(errors = {}) {
 }
 
 // this function diplay the craete post form
-function showPostForm() {
+ function showPostForm() {
   const craete_post_btn = document.getElementById("craete_post_btn");
-  craete_post_btn.addEventListener("click", () => {
-    const container = document.getElementById("container");
-    container.classList.add("modal-active");
+  if (craete_post_btn) {
+    craete_post_btn.addEventListener("click", () => {
+      const container = document.getElementById("container");
+      container.classList.add("modal-active");
 
-    // let careate our form
-    let form = postForm();
-    form.classList.add("active");
-    document.body.appendChild(form);
+      // let careate our form
+      let form = postForm();
+      form.classList.add("active");
+      document.body.appendChild(form);
 
-    /////////////////// handle the form caancling
-    const close_btn = document.getElementById("close-form");
-    close_btn.addEventListener("click", () => {
-      form.remove();
-      container.classList.remove("modal-active");
+      /////////////////// handle the form caancling
+      const close_btn = document.getElementById("close-form");
+      close_btn.addEventListener("click", () => {
+        form.remove();
+        container.classList.remove("modal-active");
+      });
     });
-  });
+  }
 }
 
-function renderHomePage() {
-  document.body.appendChild(Header());
+async function renderHomePage() {
+  // let token = getCookie("Token");
+  // console.log(token, "token");
+  let user = await isAouth();
+  console.log(user,"from dom")
+  
+  document.body.appendChild(Header(user));
   let main = document.createElement("main");
   let section = document.createElement("section");
   section.setAttribute("class", "container");

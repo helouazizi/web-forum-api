@@ -1,5 +1,7 @@
 package models
 
+import "time"
+
 type User struct {
 	ID        int    `json:"id"`
 	Age       int    `json:"age"`
@@ -18,14 +20,14 @@ type User struct {
 	// SessionToken string `json:"session_token,omitempty"`
 	// SessionExpiresAt  time.Time `json:"session_expires_at,omitempty"`
 	// LastLoginAt       time.Time `json:"last_login_at,omitempty"`
-	// CreatedAt         time.Time `json:"created_at"`
-	// UpdatedAt         time.Time `json:"updated_at"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
 }
 
 type UserLogin struct {
 	LoginId      string `json:"login_id"`
 	Password     string `json:"password"`
-	SessionToken string
+	SessionToken string `json:"token"`
 }
 
 type UserInputErrors struct {

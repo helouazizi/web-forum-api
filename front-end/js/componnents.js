@@ -1,27 +1,36 @@
-let Header = () => {
+let Header = (user) => {
   let header = document.createElement("header");
-  header.innerHTML = `
-     <h1 class="logo"><a href="/front-end/">Forum</a></h1>
-      <nav class="navigation-links">
-            <button class="primary-btn new_post_btn" id="craete_post_btn"><i class="fas fa-plus"></i> <span>New Post</span></button>
-            <button class="primary-btn" id="login_btn"><i class="fas fa-sign-in-alt"></i> Login</button>
-            <div class="user-profile hidden" id="user-profile" >
-              <img
-                src="./assets/avatar.png"
-                alt="User Profile"
-                class="profile-pic"
-              />
-              <div class="user-info">
-                <h4 class="nickname">John Doe</h4>
-                <span class="post-date">2025-05-02</span>
+  if (user) {
+    header.innerHTML = `
+        <h1 class="logo"><a href="/front-end/">Forum</a></h1>
+        <nav class="navigation-links">
+              <button class="primary-btn new_post_btn" id="craete_post_btn"><i class="fas fa-plus"></i> <span>New Post</span></button>
+              <div class="user-profile " id="user-profile" >
+                <img
+                  src="./assets/avatar.png"
+                  alt="User Profile"
+                  class="profile-pic"
+                />
+                <div class="user-info">
+                  <h4 class="nickname">John Doe</h4>
+                  <span class="post-date">2025-05-02</span>
+                </div>
               </div>
-            </div>
-      </nav>
-  `;
+        </nav>
+    `;
+  } else {
+    header.innerHTML = `
+          <h1 class="logo"><a href="/front-end/">Forum</a></h1>
+          <nav class="navigation-links">
+                <button class="primary-btn" id="login_btn"><i class="fas fa-sign-in-alt"></i> Login</button>
+          </nav>
+      `;
+  }
+
   return header;
 };
 
-let loginForm = () => {
+let loginForm = (errrors = {}) => {
   let form = document.createElement("div");
   form.setAttribute("class", "modal-overlay");
   form.setAttribute("id", "login_form");
@@ -34,9 +43,11 @@ let loginForm = () => {
     
                 <label for="login_id">Nickname or E-mail</label>
                 <input type="text" id="login_id" name="login_id" required />
+                <span>${errrors.Nickname ? errrors.Nickname : ""}</span>
     
                 <label for="login_password">Password</label>
                 <input type="password" id="login_password" name="password" required />
+                <span>${errrors.Pass ? errrors.Pass : ""}</span>
     
                 <button type="submit">Login</button>
                 </form>
