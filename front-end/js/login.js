@@ -1,4 +1,4 @@
-import { showLoginForm } from "./dom.js";
+import { showLoginForm, showErrorPage } from "./dom.js";
 function login() {
   const loginFormElement = document.getElementById("login_form_element");
   loginFormElement.addEventListener("submit", async (e) => {
@@ -15,15 +15,21 @@ function login() {
         credentials: "include", // Very important
         body: JSON.stringify(data),
       });
-      if (response.ok) {
-        // renderHomePage();
-        location.reload()
-      }else{
-        const errData = await response.json()
-        showLoginForm(errData)
+      if (!response.ok) {
+        const errorData = await response.json();
+        if (errorData.UserErrors.HasError) {
+          showLoginForm(errorData.UserErrors);
+          return;
+        }
+        const error = {
+          code: errorData.Code,
+          message: errorData.Message,
+        };
+        throw error;
       }
+      location.reload();
     } catch (err) {
-      alert("Error: " + err.message);
+      showErrorPage(err);
     }
   });
 }

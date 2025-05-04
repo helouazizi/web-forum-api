@@ -39,6 +39,9 @@ type UserInputErrors struct {
 	LastName  string
 	FirstName string
 	Gender    string
+	PostTilte string
+	PostContent string
+	Postcategories string
 }
 
 type SuccesMessage struct {

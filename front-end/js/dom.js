@@ -9,7 +9,7 @@ import {
   Footer,
 } from "./componnents.js";
 
-import { isAouth, logOut } from "./api.js";
+import { isAouth, logOut ,createPost} from "./api.js";
 
 // this function diplay the login form
 function bindLoginBtn() {
@@ -90,6 +90,7 @@ function showPostForm() {
       form.classList.add("active");
       document.body.appendChild(form);
 
+      createPost()
       /////////////////// handle the form caancling
       const close_btn = document.getElementById("close-form");
       close_btn.addEventListener("click", () => {
@@ -155,6 +156,18 @@ function showProfile() {
   }
 }
 
+function showErrorPage(error) {
+  document.body.innerHTML = `
+    <div class="error-container">
+      <h1 class="error-code">${error.code}</h1>
+      <p class="error-message">${error.message}</p>
+      <button class="back-home-btn" onclick="location.href='/'">Back Home</button>
+    </div>
+  `;
+}
+
+
+
 export {
   renderHomePage,
   showLoginForm,
@@ -163,4 +176,5 @@ export {
   bindRegisterbtn,
   bindLoginBtn,
   showMessage,
+  showErrorPage
 };

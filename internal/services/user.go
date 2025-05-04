@@ -13,10 +13,9 @@ func NewUserService(repo repository.UserMethods) *UserService {
 	return &UserService{repo: repo}
 }
 
-func (s *UserService) CreateUser(user models.User) (models.User, models.Error) {
-	User, err := s.repo.CreateUser(user)
-
-	return User, err
+func (s *UserService) CreateUser(user models.User) ( models.Error) {
+	return  s.repo.CreateUser(user)
+	
 }
 
 //	func (s *UserService) UpdateUser(user models.User) (models.User, models.Error) {

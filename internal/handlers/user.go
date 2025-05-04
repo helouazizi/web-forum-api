@@ -21,36 +21,29 @@ func NewUserHandler(userService *services.UserService) *UserHandler {
 
 func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
-		utils.RespondWithError(w, models.Error{Message: "Method Not Allowed", Code: http.StatusMethodNotAllowed})
+		utils.RespondWithJSON(w, http.StatusMethodNotAllowed, models.Error{Message: "Method Not Allowed", Code: http.StatusMethodNotAllowed})
 		return
 	}
 	var user models.User
 	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
 		logger.LogWithDetails(err)
-		utils.RespondWithError(w, models.Error{Message: "Bad Request", Code: http.StatusBadRequest})
+		utils.RespondWithJSON(w, http.StatusBadRequest, models.Error{Message: "Bad Request", Code: http.StatusBadRequest})
 		return
 	}
 
 	// lets validate the user inputs
-	userError := utils.ValidateUserInputs(user)
-	if userError.HasError {
+	err := utils.ValidateUserInputs(user)
+	if err.Code == http.StatusBadRequest {
 		logger.LogWithDetails(fmt.Errorf("invalid user credentials"))
-		utils.RespondWithJSON(w, http.StatusBadRequest, userError)
+		utils.RespondWithJSON(w, err.Code, err)
 		return
 	}
-	_, err := h.userService.CreateUser(user)
-	if err.Code != http.StatusCreated {
-		if err.UserErrors.HasError {
-			logger.LogWithDetails(fmt.Errorf(err.Message))
-			utils.RespondWithJSON(w, err.Code, err.UserErrors)
-			return
-		}
+	err1 := h.userService.CreateUser(user)
+	if err1.Code != http.StatusCreated {
 		logger.LogWithDetails(fmt.Errorf(err.Message))
-		utils.RespondWithError(w, err)
+		utils.RespondWithJSON(w, err.Code, err1)
 		return
 	}
-
-	// our response
 	utils.RespondWithJSON(w, http.StatusCreated, models.SuccesMessage{Message: "Seccefully created your account"})
 }
 
@@ -76,25 +69,20 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 
 func (h *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
-		utils.RespondWithError(w, models.Error{Message: "Methos Not Allowed", Code: http.StatusMethodNotAllowed})
+		utils.RespondWithJSON(w, http.StatusMethodNotAllowed, models.Error{Message: "Methos Not Allowed", Code: http.StatusMethodNotAllowed})
 		return
 	}
 	var user models.UserLogin
 	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
 		logger.LogWithDetails(err)
-		utils.RespondWithError(w, models.Error{Message: "Bad Request", Code: http.StatusBadRequest})
+		utils.RespondWithJSON(w, http.StatusBadRequest, models.Error{Message: "Bad Request", Code: http.StatusBadRequest})
 		return
 	}
 
 	LogedUser, err := h.userService.Login(user)
 	if err.Code != http.StatusOK {
-		if err.UserErrors.HasError {
-			logger.LogWithDetails(fmt.Errorf(err.Message))
-			utils.RespondWithJSON(w, http.StatusBadRequest, err.UserErrors)
-			return
-		}
 		logger.LogWithDetails(fmt.Errorf(err.Message))
-		utils.RespondWithJSON(w, http.StatusBadRequest, err)
+		utils.RespondWithJSON(w, err.Code, err)
 		return
 	}
 
@@ -107,17 +95,17 @@ func (h *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
 
 func (h *UserHandler) Logout(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
-		utils.RespondWithError(w, models.Error{Message: "Methos Not Allowed", Code: http.StatusMethodNotAllowed})
+		utils.RespondWithJSON(w, http.StatusMethodNotAllowed, models.Error{Message: "Methos Not Allowed", Code: http.StatusMethodNotAllowed})
 		return
 	}
 
-	cookie, err := r.Cookie("Token")
-	if err != nil {
-		// logger.LogWithDetails(err)
-		utils.RespondWithJSON(w, http.StatusTemporaryRedirect, models.Error{Message: "No token Yet", Code: http.StatusTemporaryRedirect})
+	token, err := utils.GetToken(r, "Token")
+	if err.Code != http.StatusOK {
+		logger.LogWithDetails(fmt.Errorf(err.Message))
+		utils.RespondWithJSON(w, err.Code, err)
 		return
 	}
-	token := cookie.Value
+
 	err1 := h.userService.Logout(token)
 	if err1.Code != http.StatusOK {
 		logger.LogWithDetails(fmt.Errorf(err1.Message))
@@ -134,20 +122,20 @@ func (h *UserHandler) Logout(w http.ResponseWriter, r *http.Request) {
 
 func (h *UserHandler) GetUserInfo(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
-		utils.RespondWithError(w, models.Error{Message: "Methos Not Allowed", Code: http.StatusMethodNotAllowed})
+		utils.RespondWithJSON(w, http.StatusMethodNotAllowed, models.Error{Message: "Methos Not Allowed", Code: http.StatusMethodNotAllowed})
 		return
 	}
-	cookie, err := r.Cookie("Token")
-	if err != nil {
-		logger.LogWithDetails(err)
-		utils.RespondWithJSON(w, http.StatusTemporaryRedirect, models.Error{Message: "No token Yet", Code: http.StatusTemporaryRedirect})
+	token, err := utils.GetToken(r, "Token")
+	if err.Code != http.StatusOK {
+		logger.LogWithDetails(fmt.Errorf(err.Message))
+		utils.RespondWithJSON(w, err.Code, err)
 		return
 	}
-	token := cookie.Value
+
 	userInfo, err1 := h.userService.GetUserInfo(token)
 	if err1.Code != http.StatusOK {
-		// logger.LogWithDetails(fmt.Errorf(err1.Message))
-		utils.RespondWithJSON(w, http.StatusTemporaryRedirect, models.Error{Message: "No token Yet", Code: http.StatusTemporaryRedirect})
+		logger.LogWithDetails(fmt.Errorf(err1.Message))
+		utils.RespondWithJSON(w,err1.Code, models.Error{Message: "No token Yet", Code:err1.Code})
 		return
 	}
 	utils.RespondWithJSON(w, http.StatusOK, userInfo)

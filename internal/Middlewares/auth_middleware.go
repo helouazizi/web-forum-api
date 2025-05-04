@@ -14,7 +14,7 @@ func AuthMiddleware(next http.Handler, db *sql.DB) http.Handler {
 		cookie, err := r.Cookie("Token")
 		if err != nil {
 			logger.LogWithDetails(fmt.Errorf("token Not Found"))
-			utils.RespondWithError(w, models.Error{Message: "Token Not Found", Code: http.StatusNotFound})
+			utils.RespondWithJSON(w, http.StatusNotFound, models.Error{Message: "Token Not Found", Code: http.StatusNotFound})
 			return
 		}
 		token := cookie.Value
@@ -26,16 +26,16 @@ func AuthMiddleware(next http.Handler, db *sql.DB) http.Handler {
 		err1 := db.QueryRow(query, token).Scan(&count)
 		if err1 != nil {
 			logger.LogWithDetails(fmt.Errorf("dabase cant found Token"))
-			utils.RespondWithError(w, models.Error{Message: "Dabase cant found Token", Code: http.StatusInternalServerError})
+			utils.RespondWithJSON(w, http.StatusInternalServerError, models.Error{Message: "Dabase cant found Token", Code: http.StatusInternalServerError})
 			return
 		}
 
 		if count == 0 {
 			logger.LogWithDetails(fmt.Errorf("token Not Found"))
-			utils.RespondWithError(w, models.Error{Message: "Token Not Found", Code: http.StatusNotFound})
+			utils.RespondWithJSON(w, http.StatusNotFound, models.Error{Message: "Token Not Found", Code: http.StatusNotFound})
 			return
 		}
-		
+
 		next.ServeHTTP(w, r)
 	})
 }

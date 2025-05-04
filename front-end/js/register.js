@@ -1,7 +1,11 @@
-import { showRegisterForm, showLoginForm, showMessage } from "./dom.js";
+import {
+  showRegisterForm,
+  showLoginForm,
+  showMessage,
+  showErrorPage,
+} from "./dom.js";
 
 function register() {
-  ///////////////
   const registerFormElement = document.getElementById("register_form_element");
   registerFormElement.addEventListener("submit", async (e) => {
     e.preventDefault(); // Stop regular form submission
@@ -22,21 +26,27 @@ function register() {
         }
       );
 
-      if (response.ok) {
-        const data = await response.json();
-        setTimeout(() => {
-          showMessage(data.Message);
-        }, 2000);
-        setTimeout(() => {
-          showLoginForm();
-        }, 1000);
-
-      } else {
-        const errorData = await response.json();        
-        showRegisterForm(errorData);
+      if (!response.ok) {
+        const errorData = await response.json();
+        if (errorData.UserErrors.HasError) {
+          showRegisterForm(errorData.UserErrors);
+          return;
+        }
+        const error = {
+          code: errorData.Code,
+          message: errorData.Message,
+        };
+        throw error;
       }
+      const dataa = await response.json();
+      setTimeout(() => {
+        showMessage(dataa.Message);
+      }, 2000);
+      setTimeout(() => {
+        showLoginForm();
+      }, 1000);
     } catch (err) {
-      alert("Error: " + err.message);
+      showErrorPage(err);
     }
   });
 }

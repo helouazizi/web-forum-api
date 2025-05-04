@@ -2,7 +2,6 @@
 package utils
 
 import (
-	"fmt"
 	"net/http"
 	"regexp"
 	"slices"
@@ -68,64 +67,67 @@ func ComparePass(hashed, pass []byte) error {
 
 // this function validate the user inputs
 
-func ValidateUserInputs(user models.User) models.UserInputErrors {
-	var userErrors models.UserInputErrors
+func ValidateUserInputs(user models.User) models.Error {
+	var errors models.Error
 	// lets check the nickname first
 	if !ValidUsername(user.Nickname) {
-		userErrors.HasError = true
-		userErrors.Nickname = "Invalid Nickname"
+		errors.Code = http.StatusBadRequest
+		errors.UserErrors.HasError = true
+		errors.UserErrors.Nickname = "Invalid Nickname"
 	}
 	// lets check the email
 	if !ValidEmail(user.Email) {
-		userErrors.HasError = true
-		userErrors.Email = "Invalid Email"
+		errors.Code = http.StatusBadRequest
+		errors.UserErrors.HasError = true
+		errors.UserErrors.Email = "Invalid Email"
 	}
 
 	// lets check the pass
 	if !StrongPassword(user.Password) {
-		userErrors.HasError = true
-		userErrors.Pass = "Password is too weak"
+		errors.Code = http.StatusBadRequest
+		errors.UserErrors.HasError = true
+		errors.UserErrors.Pass = "Password is too weak"
 	}
 
 	// check the age
 	if user.Age < 1 || user.Age > 100 {
-		userErrors.HasError = true
-		userErrors.Age = "Invalid Age"
+		errors.Code = http.StatusBadRequest
+		errors.UserErrors.HasError = true
+		errors.UserErrors.Age = "Invalid Age"
 	}
 
 	// check the gender
 	if user.Gender != "male" && user.Gender != "female" {
-		userErrors.HasError = true
-		userErrors.Gender = "Invalid Gender"
+		errors.Code = http.StatusBadRequest
+		errors.UserErrors.HasError = true
+		errors.UserErrors.Gender = "Invalid Gender"
 	}
 
 	// check the last and first names
-	if user.LastName == "" {
-		userErrors.HasError = true
-		userErrors.LastName = "Invalid Lastname"
+	if user.LastName == "" || len(user.LastName) < 3 || len(user.LastName) > 50 {
+		errors.Code = http.StatusBadRequest
+		errors.UserErrors.HasError = true
+		errors.UserErrors.LastName = "Invalid Lastname"
 	}
-	if user.FirstName == "" {
-		userErrors.HasError = true
-		userErrors.FirstName = "Invalid Firstname"
+	if user.FirstName == "" || len(user.FirstName) < 3 || len(user.FirstName) > 50 {
+		errors.Code = http.StatusBadRequest
+		errors.UserErrors.HasError = true
+		errors.UserErrors.FirstName = "Invalid Firstname"
 	}
 
-	return userErrors
+	return errors
 }
 
-func ProtectedHandler(w http.ResponseWriter, r *http.Request) {
-	cookie, err := r.Cookie("session_token")
-	if err != nil {
-		if err == http.ErrNoCookie {
-			// No cookie found — unauthorized
-			http.Error(w, "Unauthorized", http.StatusUnauthorized)
-			return
+func GetToken(r *http.Request, name string) (string, models.Error) {
+	cookie, err := r.Cookie(name)
+	if err != nil || cookie.Value == "" {
+		// Return unauthorized if there's no cookie or cookie is empty
+		return "", models.Error{
+			Message: "Token not found or invalid",
+			Code:    http.StatusUnauthorized,
 		}
-		// Other error
-		http.Error(w, "Bad Request", http.StatusBadRequest)
-		return
 	}
-
 	token := cookie.Value
-	// Now you can use the token (e.g., validate it)
-	fmt.Fprintf(w, "Your session token is: %s", token)
+
+	return token, models.Error{Message: "User Has Token", Code: http.StatusOK}
 }

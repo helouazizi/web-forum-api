@@ -22,18 +22,10 @@ func NewPostRepository(db *sql.DB) *PostRepository {
 
 // CreatePost requires the user to be logged in (verified by token)
 func (r *PostRepository) CreatePost(post models.Post) models.Error {
-	// Validate the post fields (e.g., check for empty title/content)
-	if post.Title == "" || post.Content == "" {
-		return models.Error{
-			Message: "Title and content cannot be empty",
-			Code:    http.StatusBadRequest,
-		}
-	}
-
 	// Insert the post into the database
 	query := `
-		INSERT INTO posts (user_id, title, content, created_at, updated_at)
-		VALUES (?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+		INSERT INTO posts (user_id, title, content)
+		VALUES (?, ?, ?)
 	`
 	_, err := r.db.Exec(query, post.UserID, post.Title, post.Content)
 	if err != nil {

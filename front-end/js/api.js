@@ -1,4 +1,4 @@
-import { renderHomePage, showLoginForm } from "./dom.js";
+import { renderHomePage, showLoginForm,showMessage } from "./dom.js";
 async function isAouth() {
   try {
     const response = await fetch("http://localhost:3000/api/v1/users/info", {
@@ -15,7 +15,9 @@ async function isAouth() {
       return null;
     }
   } catch (err) {
-    alert("Error: " + err.message);
+    // alert("Error: " + err.message);
+    console.log(err);
+    
   }
 }
 
@@ -28,14 +30,14 @@ function logOut() {
           "http://localhost:3000/api/v1/users/logout",
           {
             method: "GET",
-            credentials: "include", 
+            credentials: "include",
           }
         );
 
         if (response.ok) {
-          renderHomePage()
-          showLoginForm()
-          location.reload()
+          renderHomePage();
+          showLoginForm();
+          location.reload();
         } else {
           const errorData = await response.json();
           console.error(
@@ -52,4 +54,54 @@ function logOut() {
   }
 }
 
-export { isAouth, logOut };
+function createPost() {
+  const formElement = document.querySelector("[createPost_form_element]");
+  if (!formElement) return;
+
+  formElement.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const title = formElement.querySelector("#title").value.trim();
+    const content = formElement.querySelector("#content").value.trim();
+    const categoryCheckboxes = formElement.querySelectorAll(
+      'input[name="categories"]:checked'
+    );
+    const categories = Array.from(categoryCheckboxes).map((cb) => cb.value);
+
+    const postData = {
+      title,
+      content,
+      categories,
+    };
+
+    console.log(postData,"befor submition post");
+    
+
+    // try {
+    //   const response = await fetch(
+    //     "http://localhost:3000/api/v1/posts/create",
+    //     {
+    //       method: "POST",
+    //       credentials: "include", // Very important
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //       },
+    //       body: JSON.stringify(postData),
+    //     }
+    //   );
+
+    //   if (!response.ok) {
+    //     const error = await response.json();
+    //     console.log(error,"post err"); 
+    //     return
+    //   }
+    //   const result = await response.json();
+    //   showMessage(result.Message)
+    //   document.getElementById("post_form")?.remove();
+    // } catch (err) {
+    //   console.error(err,"from catch post");
+    //   alert("Failed to create post.");
+    // }
+  });
+}
+
+export { isAouth, logOut, createPost };

@@ -12,4 +12,5 @@ type Post struct {
 	TotalLikes    int       `json:"total_likes"`
 	TotalDislikes int       `json:"total_dislikes"`
 	TotalComments int       `json:"total_comments"`
+	Categories    []string  `json:"categories"`
 }

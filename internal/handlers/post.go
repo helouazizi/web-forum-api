@@ -21,22 +21,30 @@ func NewPostHandler(PostService *services.PostService) *PostHandler {
 
 func (h *PostHandler) CreatePost(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
-		utils.RespondWithError(w, models.Error{Message: "Method Not Allowed", Code: http.StatusMethodNotAllowed})
+		// utils.RespondWithError(w, models.Error{Message: "Method Not Allowed", Code: http.StatusMethodNotAllowed})
 		return
 	}
 	var Post models.Post
 	if err := json.NewDecoder(r.Body).Decode(&Post); err != nil {
 		logger.LogWithDetails(err)
-		utils.RespondWithError(w, models.Error{Message: "Inetrnal Server Error", Code: http.StatusInternalServerError})
+		// utils.RespondWithError(w, models.Error{Message: "Inetrnal Server Error", Code: http.StatusInternalServerError})
 		return
 	}
-	err := h.PostService.CreatePost(Post)
-	if err.Code != http.StatusCreated {
-		logger.LogWithDetails(fmt.Errorf(err.Message))
-		utils.RespondWithError(w, err)
+	// lets validate the post input
+	err := utils.ValidPostInputs(Post)
+	if err.UserErrors.HasError {
+		logger.LogWithDetails(fmt.Errorf("invalid post input"))
+		// utils.RespondWithError(w, models.Error{Message: "Bad Request", Code: http.StatusBadRequest,UserErrors: err.UserErrors})
 		return
+
 	}
 
+	err1 := h.PostService.CreatePost(Post)
+	if err1.Code != http.StatusCreated {
+		logger.LogWithDetails(fmt.Errorf(err.Message))
+		// utils.RespondWithError(w, err)
+		return
+	}
 	// our response
-	utils.RespondWithJSON(w, http.StatusCreated, nil)
+	utils.RespondWithJSON(w, http.StatusCreated, models.SuccesMessage{Message: "Post created successfully"})
 }

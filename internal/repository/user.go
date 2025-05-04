@@ -14,10 +14,9 @@ import (
 )
 
 type UserMethods interface {
-	CreateUser(user models.User) (models.User, models.Error)
+	CreateUser(user models.User) models.Error
 	Login(user models.UserLogin) (models.UserLogin, models.Error)
-	Logout(token string) (models.Error)
-
+	Logout(token string) models.Error
 	//UpdateUser(user models.User) (models.User, models.Error)
 	GetUserInfo(token string) (models.User, models.Error)
 	IsUsernameOrEmailTaken(username, email string) models.Error
@@ -31,30 +30,31 @@ func NewUserRepository(db *sql.DB) *UserRepository {
 	return &UserRepository{db: db}
 }
 
-func (r *UserRepository) CreateUser(user models.User) (models.User, models.Error) {
-	// Check if username or email already exists
-	err1 := r.IsUsernameOrEmailTaken(user.Nickname, user.Email)
-	if err1.Code != http.StatusOK {
-		logger.LogWithDetails(fmt.Errorf(err1.Message))
-		return models.User{}, err1
-	}
-
+func (r *UserRepository) CreateUser(user models.User) models.Error {
 	// lets hash the pass
 	hashedPass, err := utils.HashPassWord(user.Password)
 	if err != nil {
-		return models.User{}, models.Error{
-			Message:    "Internal server error",
-			Code:       http.StatusInternalServerError,
-			UserErrors: models.UserInputErrors{HasError: false},
+		logger.LogWithDetails(err)
+		return models.Error{
+			Message: "Internal server error",
+			Code:    http.StatusInternalServerError,
 		}
 	}
+
+	// check email existnace and nick name
+	err1 := r.IsUsernameOrEmailTaken(user.Nickname, user.Email)
+	if err1.Code != http.StatusOK {
+		logger.LogWithDetails(fmt.Errorf(err1.Message))
+		return err1
+	}
+
 	// Proceed to insert
 	query := `
 	INSERT INTO users (
-		nickname, age, gender, first_name, last_name, email, password_hash , created_at, updated_at
-	) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ? )
+		nickname, age, gender, first_name, last_name, email, password_hash 
+	) VALUES (?, ?, ?, ?, ?, ?, ? )
 	`
-	result, err := r.db.Exec(query,
+	_, err = r.db.Exec(query,
 		user.Nickname,
 		user.Age,
 		user.Gender,
@@ -62,31 +62,19 @@ func (r *UserRepository) CreateUser(user models.User) (models.User, models.Error
 		user.LastName,
 		user.Email,
 		hashedPass,
-		time.Now(), // created at
-		time.Now(), // updated at
 	)
 	if err != nil {
 		logger.LogWithDetails(err)
-		return models.User{}, models.Error{
+		return models.Error{
 			Message: "Internal server error",
 			Code:    http.StatusInternalServerError,
 		}
 	}
 
-	id, err := result.LastInsertId()
-	if err != nil {
-		return models.User{}, models.Error{
-			Message:    "Internal server error",
-			Code:       http.StatusInternalServerError,
-			UserErrors: models.UserInputErrors{HasError: false},
-		}
-	}
-
-	user.ID = int(id)
-	return user, models.Error{
-		Message:    "seccefully created the user",
-		Code:       http.StatusCreated,
-		UserErrors: models.UserInputErrors{HasError: false},
+	// finaly seccefully create a user
+	return models.Error{
+		Message: "seccefully created your account",
+		Code:    http.StatusCreated,
 	}
 }
 
@@ -134,51 +122,70 @@ func (r *UserRepository) Login(user models.UserLogin) (models.UserLogin, models.
 		return models.UserLogin{}, models.Error{
 			Message: "Internal Sererver Error",
 			Code:    http.StatusInternalServerError,
-			UserErrors: models.UserInputErrors{
-				HasError: false,
-			}}
+		}
 	}
-	//  Set the token into user struct
+
 	user.SessionToken = newToken
-	// user.SessionExpiresAt = time.Now().Add(24 * time.Hour)
+
 	return user, models.Error{
 		Message: "Seccefully Loged in",
 		Code:    http.StatusOK,
-		UserErrors: models.UserInputErrors{
-			HasError: false,
-		}}
+	}
 }
 
 func (r *UserRepository) GetUserInfo(token string) (models.User, models.Error) {
-
 	var userInfo models.User
-	query := `SELECT id,age,gender,first_name,last_name,nickname,email,created_at,updated_at FROM users WHERE session_token = ?`
-	err := r.db.QueryRow(query, token).Scan(&userInfo.ID, &userInfo.Age, &userInfo.Gender, &userInfo.FirstName, &userInfo.LastName, &userInfo.Nickname, &userInfo.Email, &userInfo.CreatedAt, &userInfo.UpdatedAt)
+	query := `
+		SELECT id, age, gender, first_name, last_name, nickname, email, created_at, updated_at 
+		FROM users 
+		WHERE session_token = ? AND session_expires_at > CURRENT_TIMESTAMP
+	`
+
+	err := r.db.QueryRow(query, token).Scan(
+		&userInfo.ID,
+		&userInfo.Age,
+		&userInfo.Gender,
+		&userInfo.FirstName,
+		&userInfo.LastName,
+		&userInfo.Nickname,
+		&userInfo.Email,
+		&userInfo.CreatedAt,
+		&userInfo.UpdatedAt,
+	)
+
 	if err != nil {
 		logger.LogWithDetails(err)
 		return models.User{}, models.Error{
 			Message: "Internal Server Error",
 			Code:    http.StatusInternalServerError,
-			UserErrors: models.UserInputErrors{
-				HasError: false,
-			}}
+		}
 	}
 
 	return userInfo, models.Error{
 		Message: "Valid Token",
 		Code:    http.StatusOK,
-		UserErrors: models.UserInputErrors{
-			HasError: false,
-		}}
+	}
 }
 
 func (r *UserRepository) Logout(token string) models.Error {
 	query := `UPDATE users SET session_token = NULL, session_expires_at = NULL WHERE session_token = ?`
-	_, err := r.db.Exec(query, token)
+	result, err := r.db.Exec(query, token)
 	if err != nil {
 		logger.LogWithDetails(err)
 		return models.Error{Message: "Internal server error", Code: http.StatusInternalServerError}
 	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		logger.LogWithDetails(err)
+		return models.Error{Message: "Internal server error", Code: http.StatusInternalServerError}
+	}
+
+	if rowsAffected == 0 {
+		// Token was invalid or already cleared
+		return models.Error{Message: "Invalid or expired session", Code: http.StatusUnauthorized}
+	}
+
 	return models.Error{Message: "Successfully logged out", Code: http.StatusOK}
 }
 
@@ -218,10 +225,10 @@ func (r *UserRepository) IsUsernameOrEmailTaken(username, email string) models.E
 	var count int
 	err := r.db.QueryRow(query, username, email).Scan(&count)
 	if err != nil {
+		logger.LogWithDetails(err)
 		return models.Error{
-			Message:    "Internal server error",
-			Code:       http.StatusInternalServerError,
-			UserErrors: models.UserInputErrors{HasError: false},
+			Message: "Internal server error",
+			Code:    http.StatusInternalServerError,
 		}
 	}
 
@@ -235,8 +242,7 @@ func (r *UserRepository) IsUsernameOrEmailTaken(username, email string) models.E
 
 	// No match found
 	return models.Error{
-		Message:    "Username and email are available",
-		Code:       http.StatusOK, // 200
-		UserErrors: models.UserInputErrors{HasError: true},
+		Message: "Username and email are available",
+		Code:    http.StatusOK,
 	}
 }
