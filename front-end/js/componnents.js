@@ -191,8 +191,10 @@ let postCard = () => {
   return post;
 };
 
-let postForm = () => {
+let postForm = (errors={}) => {
   // let careate our form
+  console.log(errors,"from comp");
+  
   let form = document.createElement("div");
   form.setAttribute("class", "modal-overlay");
   form.setAttribute("id", "post_form");
@@ -204,9 +206,12 @@ let postForm = () => {
        
            <label for="title">Title:</label>
            <input type="text" id="title" name="title" maxlength="255" required />
+           <span>${errors.PostTilte ? errors.PostTilte : ""}</span>
+
          
            <label for="content">Content:</label>
            <textarea id="content" name="content" rows="6" required></textarea>
+           <span>${errors.PostContent ? errors.PostContent : ""}</span>
          
            <label>Select Categories:</label>
            <div class="category-container">
@@ -239,6 +244,7 @@ let postForm = () => {
                <label for="cat-biz">Business</label>
            </div>
            </div>
+           <span>${errors.Postcategories ? errors.Postcategories : ""}</span>
    
          
            <button type="submit">Create Post</button>

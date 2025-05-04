@@ -21,24 +21,38 @@ func NewPostHandler(PostService *services.PostService) *PostHandler {
 
 func (h *PostHandler) CreatePost(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
-		// utils.RespondWithError(w, models.Error{Message: "Method Not Allowed", Code: http.StatusMethodNotAllowed})
+		utils.RespondWithJSON(w, http.StatusMethodNotAllowed, models.Error{Message: "Methos Not Allowed", Code: http.StatusMethodNotAllowed})
 		return
 	}
 	var Post models.Post
 	if err := json.NewDecoder(r.Body).Decode(&Post); err != nil {
 		logger.LogWithDetails(err)
-		// utils.RespondWithError(w, models.Error{Message: "Inetrnal Server Error", Code: http.StatusInternalServerError})
+		utils.RespondWithJSON(w, http.StatusBadRequest, models.Error{Message: "Bad Request", Code: http.StatusBadRequest})
 		return
 	}
 	// lets validate the post input
 	err := utils.ValidPostInputs(Post)
 	if err.UserErrors.HasError {
 		logger.LogWithDetails(fmt.Errorf("invalid post input"))
-		// utils.RespondWithError(w, models.Error{Message: "Bad Request", Code: http.StatusBadRequest,UserErrors: err.UserErrors})
+		utils.RespondWithJSON(w, http.StatusBadRequest, err)
 		return
-
 	}
 
+	// lets get the user id
+	token, err := utils.GetToken(r, "Token")
+	if err.Code != http.StatusOK {
+		utils.RespondWithJSON(w, err.Code, err)
+		return
+	}
+
+	userId, err := h.PostService.GetUserID(token)
+	if err.Code != http.StatusOK {
+		logger.LogWithDetails(fmt.Errorf(err.Message))
+		utils.RespondWithJSON(w, err.Code, err)
+		return
+	}
+	Post.UserID = userId
+	
 	err1 := h.PostService.CreatePost(Post)
 	if err1.Code != http.StatusCreated {
 		logger.LogWithDetails(fmt.Errorf(err.Message))

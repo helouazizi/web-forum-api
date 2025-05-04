@@ -14,6 +14,10 @@ func NewPostService(repo repository.PostsMethods) *PostService {
 }
 
 func (s *PostService) CreatePost(post models.Post) models.Error {
-	
-	return  s.repo.CreatePost(post)
+
+	return s.repo.CreatePost(post)
+}
+
+func (s *PostService) GetUserID(token string)(int, models.Error) {
+	return s.repo.GetUserId(token)
 }

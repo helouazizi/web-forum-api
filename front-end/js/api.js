@@ -1,4 +1,10 @@
-import { renderHomePage, showLoginForm,showMessage } from "./dom.js";
+import {
+  renderHomePage,
+  showErrorPage,
+  showLoginForm,
+  showMessage,
+  showPostForm,
+} from "./dom.js";
 async function isAouth() {
   try {
     const response = await fetch("http://localhost:3000/api/v1/users/info", {
@@ -17,7 +23,6 @@ async function isAouth() {
   } catch (err) {
     // alert("Error: " + err.message);
     console.log(err);
-    
   }
 }
 
@@ -35,8 +40,8 @@ function logOut() {
         );
 
         if (response.ok) {
-          renderHomePage();
-          showLoginForm();
+          // renderHomePage();
+          // showLoginForm();
           location.reload();
         } else {
           const errorData = await response.json();
@@ -73,34 +78,42 @@ function createPost() {
       categories,
     };
 
-    console.log(postData,"befor submition post");
-    
+    console.log(postData, "befor submition post");
 
-    // try {
-    //   const response = await fetch(
-    //     "http://localhost:3000/api/v1/posts/create",
-    //     {
-    //       method: "POST",
-    //       credentials: "include", // Very important
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //       },
-    //       body: JSON.stringify(postData),
-    //     }
-    //   );
+    try {
+      const response = await fetch(
+        "http://localhost:3000/api/v1/posts/create",
+        {
+          method: "POST",
+          credentials: "include", // Very important
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(postData),
+        }
+      );
 
-    //   if (!response.ok) {
-    //     const error = await response.json();
-    //     console.log(error,"post err"); 
-    //     return
-    //   }
-    //   const result = await response.json();
-    //   showMessage(result.Message)
-    //   document.getElementById("post_form")?.remove();
-    // } catch (err) {
-    //   console.error(err,"from catch post");
-    //   alert("Failed to create post.");
-    // }
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.log(errorData.UserErrors,"from api");
+        if (errorData.UserErrors.HasError) {
+          showPostForm(errorData.UserErrors);
+          return;
+        }
+        const error = {
+          code: errorData.Code,
+          message: errorData.Message,
+        };
+        throw error;
+      }
+      const result = await response.json();
+      showMessage(result.Message);
+      setTimeout(() => {
+        location.reload();
+      }, 3000);
+    } catch (err) {
+      showErrorPage(err);
+    }
   });
 }
 

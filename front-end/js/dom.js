@@ -78,7 +78,8 @@ function showRegisterForm(errors = {}) {
 }
 
 // this function diplay the craete post form
-function showPostForm() {
+function showPostForm(errors={}) {
+  console.log(errors,"from dom");
   const craete_post_btn = document.getElementById("craete_post_btn");
   if (craete_post_btn) {
     craete_post_btn.addEventListener("click", () => {
@@ -86,7 +87,7 @@ function showPostForm() {
       container.classList.add("modal-active");
 
       // let careate our form
-      let form = postForm();
+      let form = postForm(errors);
       form.classList.add("active");
       document.body.appendChild(form);
 
