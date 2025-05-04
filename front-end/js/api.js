@@ -95,9 +95,14 @@ function createPost() {
 
       if (!response.ok) {
         const errorData = await response.json();
-        console.log(errorData.UserErrors,"from api");
+        console.log(errorData.UserErrors, "from api");
         if (errorData.UserErrors.HasError) {
-          showPostForm(errorData.UserErrors);
+          showPostForm(errorData.UserErrors, true);
+          console.log("heeeere");
+          return;
+        }
+        if (errorData.Code === 401) {
+          showLoginForm();
           return;
         }
         const error = {

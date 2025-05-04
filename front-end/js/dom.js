@@ -9,7 +9,7 @@ import {
   Footer,
 } from "./componnents.js";
 
-import { isAouth, logOut ,createPost} from "./api.js";
+import { isAouth, logOut, createPost } from "./api.js";
 
 // this function diplay the login form
 function bindLoginBtn() {
@@ -30,8 +30,7 @@ function showLoginForm(errors) {
   container.classList.add("modal-active");
 
   // remove the previouse form
-  document.getElementById("login_form")?.remove();
-  document.getElementById("register_form")?.remove();
+  removeOldeForms();
   let form = loginForm(errors);
   form.classList.add("active");
   document.body.appendChild(form);
@@ -60,8 +59,7 @@ function showRegisterForm(errors = {}) {
   const container = document.getElementById("container");
   container.classList.add("modal-active");
   // remove the previouse form
-  document.getElementById("login_form")?.remove();
-  document.getElementById("register_form")?.remove();
+  removeOldeForms();
 
   let form = registerForm(errors);
   form.classList.add("active");
@@ -78,29 +76,48 @@ function showRegisterForm(errors = {}) {
 }
 
 // this function diplay the craete post form
-function showPostForm(errors={}) {
-  console.log(errors,"from dom");
+function showPostForm(errors = {}, openImmediately = false) {
+
   const craete_post_btn = document.getElementById("craete_post_btn");
-  if (craete_post_btn) {
-    craete_post_btn.addEventListener("click", () => {
-      const container = document.getElementById("container");
-      container.classList.add("modal-active");
+  if (!craete_post_btn && !openImmediately) return;
 
-      // let careate our form
-      let form = postForm(errors);
-      form.classList.add("active");
-      document.body.appendChild(form);
+  const openForm = () => {
+    const container = document.getElementById("container");
+    container.classList.add("modal-active");
 
-      createPost()
-      /////////////////// handle the form caancling
-      const close_btn = document.getElementById("close-form");
-      close_btn.addEventListener("click", () => {
-        form.remove();
-        container.classList.remove("modal-active");
-      });
+    // Remove any existing form first
+    removeOldeForms();
+
+    const form = postForm(errors);
+    form.classList.add("active");
+    document.body.appendChild(form);
+    createPost();
+
+    const close_btn = document.getElementById("close-form");
+    close_btn.addEventListener("click", () => {
+      form.remove();
+      container.classList.remove("modal-active");
+    });
+  };
+
+  // If we're calling this after a failed submit, open form immediately
+  if (openImmediately) {
+    openForm();
+  } else {
+    craete_post_btn.addEventListener("click", openForm);
+  }
+}
+
+function removeOldeForms() {
+  let allforms = document.querySelectorAll(".modal-overlay"); // add dot to select by class
+  if (allforms.length > 0) {
+    console.log(allforms, "form");
+    allforms.forEach((form) => {
+      form.remove();
     });
   }
 }
+
 
 function getCookie(name) {
   const match = document.cookie.match(new RegExp("(^| )" + name + "=([^;]+)"));
@@ -167,8 +184,6 @@ function showErrorPage(error) {
   `;
 }
 
-
-
 export {
   renderHomePage,
   showLoginForm,
@@ -177,5 +192,5 @@ export {
   bindRegisterbtn,
   bindLoginBtn,
   showMessage,
-  showErrorPage
+  showErrorPage,
 };

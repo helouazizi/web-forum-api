@@ -9,5 +9,5 @@ document.addEventListener("DOMContentLoaded", async () => {
   await renderHomePage();
   bindLoginBtn();
   bindRegisterbtn();
-  showPostForm();
+  showPostForm({},false);
 });

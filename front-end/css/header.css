@@ -54,12 +54,10 @@ header {
 
 .underProfile {
   position: absolute;
-  top: 100%;
-  right: 0;
+  top: 6rem;
+  right: 11%;
   z-index: 100;
 }
-
-
 
 .profile-card {
   background-color: #ffffff;
@@ -67,7 +65,7 @@ header {
   padding: 1.5rem;
   width: 320px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   color: #333;
 }
 
@@ -137,5 +135,11 @@ header {
     i {
       padding: 0.5rem;
     }
+  }
+
+  .underProfile {
+    right: 1rem;
+    top: 5rem;
+    width: -webkit-fill-available;
   }
 }
