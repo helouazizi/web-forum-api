@@ -113,7 +113,7 @@ func (h *UserHandler) Logout(w http.ResponseWriter, r *http.Request) {
 
 	cookie, err := r.Cookie("Token")
 	if err != nil {
-		logger.LogWithDetails(err)
+		// logger.LogWithDetails(err)
 		utils.RespondWithJSON(w, http.StatusTemporaryRedirect, models.Error{Message: "No token Yet", Code: http.StatusTemporaryRedirect})
 		return
 	}
@@ -146,7 +146,7 @@ func (h *UserHandler) GetUserInfo(w http.ResponseWriter, r *http.Request) {
 	token := cookie.Value
 	userInfo, err1 := h.userService.GetUserInfo(token)
 	if err1.Code != http.StatusOK {
-		logger.LogWithDetails(fmt.Errorf(err1.Message))
+		// logger.LogWithDetails(fmt.Errorf(err1.Message))
 		utils.RespondWithJSON(w, http.StatusTemporaryRedirect, models.Error{Message: "No token Yet", Code: http.StatusTemporaryRedirect})
 		return
 	}

@@ -33,7 +33,9 @@ main::-webkit-scrollbar {
 .primary-btn {
   padding: 5px;
   border-radius: 5px;
-  background-color: var(--secondary-color);
+  background-color: var(--primary-color);
+  color: var(--third-color);
+  border: none;
 }
 
 

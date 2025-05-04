@@ -49,16 +49,79 @@ header {
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  cursor: pointer;
 }
 
-#underProfile{
+.underProfile {
   position: absolute;
   top: 100%;
-  background-color: cadetblue;
-  left: 0;
+  right: 0;
+  z-index: 100;
 }
 
-/* 425 */
+
+
+.profile-card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  width: 320px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 1rem;
+}
+
+.profile-pic {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #007bff;
+}
+
+.profile-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.detail-item {
+  background: #f9f9f9;
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+}
+
+.profile-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+  justify-content: space-between;
+}
+
+.profile-actions .primary-btn {
+  flex: 1;
+  padding: 0.6rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+/* .primary-btn:hover {
+  background-color: #0056b3;
+} */
+
 
 /* Responsive 2-column grid on wider screens */
 @media (max-width: 425px) {

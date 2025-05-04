@@ -28,39 +28,73 @@ let Header = (user) => {
   return header;
 };
 
+// let userProfile = (user) => {
+//   let underProfile = document.createElement("div");
+//   underProfile.setAttribute("class", "hidden underProfile");
+//   underProfile.setAttribute("id", "underProfile");
+//   underProfile.innerHTML = `
+//                 <div class="upInfo">
+//                    <div class="" id="" >
+//                       <img
+//                         src="./assets/avatar.png"
+//                         alt="User Profile"
+//                         class="profile-pic"
+//                       />
+//                       <h2>${user.nickname}</h2>
+//                    </div>
+//                    <div>
+//                    <span>${user.email}</span>
+//                    <span>${user.first_name}</span>
+//                    <span>${user.last_name}</span>
+//                    <span>${user.gender}</span>
+//                    <span>${user.age}</span>
+//                    </div> 
+//                 </div>
+//                 <div class="midleInfo"> 
+//                   <h2>liked Posts</h2>
+//                 </div>
+//                 <div class="buttomInfo"> 
+//                 <button class="primary-btn" id="settings">Settings</button> 
+//                 <button class="primary-btn" id="log_out">Log Out</button>
+//                 </div>      
+//             `;
+
+//   return underProfile;
+// };
 let userProfile = (user) => {
   let underProfile = document.createElement("div");
-  underProfile.setAttribute("class", "hidden underProfile");
+  underProfile.setAttribute("class", "underProfile hidden");
   underProfile.setAttribute("id", "underProfile");
+
   underProfile.innerHTML = `
-                <div class="upInfo">
-                   <div class="" id="" >
-                      <img
-                        src="./assets/avatar.png"
-                        alt="User Profile"
-                        class="profile-pic"
-                      />
-                      <h2>${user.nickname}</h2>
-                   </div>
-                   <div>
-                   <span>${user.email}</span>
-                   <span>${user.first_name}</span>
-                   <span>${user.last_name}</span>
-                   <span>${user.gender}</span>
-                   <span>${user.age}</span>
-                   </div> 
-                </div>
-                <div class="midleInfo"> 
-                  <h2>liked Posts</h2>
-                </div>
-                <div class="buttomInfo"> 
-                <button class="primary-btn" id="settings">Settings</button> 
-                <button class="primary-btn" id="log_out">Log Out</button>
-                </div>      
-            `;
+    <div class="profile-card">
+      <div class="profile-header">
+        <img src="./assets/avatar.png" alt="User Profile" class="profile-pic" />
+        <div>
+          <h2>${user.nickname}</h2>
+          <p>${user.email}</p>
+        </div>
+      </div>
+
+      <div class="profile-details">
+        <div class="detail-item"><strong>First Name:</strong> ${user.first_name}</div>
+        <div class="detail-item"><strong>Last Name:</strong> ${user.last_name}</div>
+        <div class="detail-item"><strong>Gender:</strong> ${user.gender}</div>
+        <div class="detail-item"><strong>Age:</strong> ${user.age}</div>
+        <div class="detail-item"><strong>Created At:</strong> ${new Date(user.created_at).toLocaleString()}</div>
+        <div class="detail-item"><strong>Updated At:</strong> ${new Date(user.updated_at).toLocaleString()}</div>
+      </div>
+
+      <div class="profile-actions">
+        <button class="primary-btn" id="settings">Settings</button>
+        <button class="primary-btn" id="log_out">Log Out</button>
+      </div>
+    </div>
+  `;
 
   return underProfile;
 };
+
 
 let loginForm = (errrors = {}) => {
   let form = document.createElement("div");

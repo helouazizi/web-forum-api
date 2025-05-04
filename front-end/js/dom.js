@@ -107,19 +107,17 @@ function getCookie(name) {
 
 async function renderHomePage() {
   let user = await isAouth();
-  console.log(user, "from dom");
-
   document.body.innerHTML = "";
   document.getElementById("login_form")?.remove();
   document.getElementById("register_form")?.remove();
   document.getElementById("container")?.classList.remove("modal-active");
-
   document.body.appendChild(Header(user));
+
   if (user) {
     showProfile();
-    
+    logOut();
   }
-  logOut();
+
   let main = document.createElement("main");
   let section = document.createElement("section");
   section.setAttribute("class", "container");

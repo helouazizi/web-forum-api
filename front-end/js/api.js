@@ -1,4 +1,4 @@
-import { showLoginForm } from "./dom.js";
+import { renderHomePage, showLoginForm } from "./dom.js";
 async function isAouth() {
   try {
     const response = await fetch("http://localhost:3000/api/v1/users/info", {
@@ -21,20 +21,35 @@ async function isAouth() {
 
 function logOut() {
   let log_out_btn = document.getElementById("log_out");
-  console.log(log_out_btn,"hhhh");
   if (log_out_btn) {
-    
-    log_out_btn.addEventListener('click',async()=>{
+    log_out_btn.addEventListener("click", async () => {
       try {
-        const response = await fetch("http://localhost:3000/api/v1/users/logout");
+        const response = await fetch(
+          "http://localhost:3000/api/v1/users/logout",
+          {
+            method: "GET",
+            credentials: "include", 
+          }
+        );
+
         if (response.ok) {
-          renderHomePage();
+          renderHomePage()
+          showLoginForm()
+          location.reload()
+        } else {
+          const errorData = await response.json();
+          console.error(
+            "Logout failed:",
+            errorData.message || response.statusText
+          );
+          alert("Logout failed: " + (errorData.message || response.statusText));
         }
       } catch (err) {
-        alert("Error: " + err.message);
+        console.error("Network error:", err);
+        alert("Network error: " + err.message);
       }
-    })
+    });
   }
 }
 
-export { isAouth,logOut };
+export { isAouth, logOut };

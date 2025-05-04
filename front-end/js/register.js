@@ -32,9 +32,7 @@ function register() {
         }, 1000);
 
       } else {
-        const errorData = await response.json();
-        console.log(errorData);
-        
+        const errorData = await response.json();        
         showRegisterForm(errorData);
       }
     } catch (err) {
