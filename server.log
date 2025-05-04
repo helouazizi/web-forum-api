@@ -29,3 +29,18 @@
 2025/05/04 10:30:06 2025-05-04T10:30:06+01:00 [Function: web-forum/internal/handlers.(*UserHandler).GetUserInfo] [Line: 142] http: named cookie not present
 2025/05/04 10:35:47 2025-05-04T10:35:47+01:00 [Function: web-forum/internal/handlers.(*UserHandler).GetUserInfo] [Line: 142] http: named cookie not present
 2025/05/04 10:35:47 2025-05-04T10:35:47+01:00 [Function: web-forum/internal/handlers.(*UserHandler).GetUserInfo] [Line: 142] http: named cookie not present
+2025/05/04 10:36:28 2025-05-04T10:36:28+01:00 [Function: web-forum/internal/handlers.(*UserHandler).GetUserInfo] [Line: 142] http: named cookie not present
+2025/05/04 10:36:42 2025-05-04T10:36:42+01:00 [Function: web-forum/internal/repository.(*UserRepository).Login] [Line: 117] crypto/bcrypt: hashedPassword is not the hash of the given password
+2025/05/04 10:36:42 2025-05-04T10:36:42+01:00 [Function: web-forum/internal/handlers.(*UserHandler).Login] [Line: 92] Bad Request
+2025/05/04 10:38:53 2025-05-04T10:38:53+01:00 [Function: web-forum/internal/handlers.(*UserHandler).GetUserInfo] [Line: 142] http: named cookie not present
+2025/05/04 10:39:09 2025-05-04T10:39:09+01:00 [Function: web-forum/internal/repository.(*UserRepository).Login] [Line: 117] crypto/bcrypt: hashedPassword is not the hash of the given password
+2025/05/04 10:39:09 2025-05-04T10:39:09+01:00 [Function: web-forum/internal/handlers.(*UserHandler).Login] [Line: 92] Bad Request
+2025/05/04 10:39:21 2025-05-04T10:39:21+01:00 [Function: web-forum/internal/handlers.(*UserHandler).Login] [Line: 92] Bad Request
+2025/05/04 10:39:44 2025-05-04T10:39:44+01:00 [Function: web-forum/internal/handlers.(*UserHandler).GetUserInfo] [Line: 142] http: named cookie not present
+2025/05/04 10:39:44 2025-05-04T10:39:44+01:00 [Function: web-forum/internal/handlers.(*UserHandler).GetUserInfo] [Line: 142] http: named cookie not present
+2025/05/04 10:39:47 2025-05-04T10:39:47+01:00 [Function: web-forum/internal/handlers.(*UserHandler).GetUserInfo] [Line: 142] http: named cookie not present
+2025/05/04 10:40:31 2025-05-04T10:40:31+01:00 [Function: web-forum/internal/handlers.(*UserHandler).CreateUser] [Line: 37] invalid user credentials
+2025/05/04 10:41:34 2025-05-04T10:41:34+01:00 [Function: web-forum/internal/handlers.(*UserHandler).GetUserInfo] [Line: 142] http: named cookie not present
+2025/05/04 10:41:35 2025-05-04T10:41:35+01:00 [Function: web-forum/internal/handlers.(*UserHandler).GetUserInfo] [Line: 142] http: named cookie not present
+2025/05/04 10:42:23 2025-05-04T10:42:23+01:00 [Function: web-forum/internal/handlers.(*UserHandler).Login] [Line: 92] Bad Request
+2025/05/04 10:42:37 2025-05-04T10:42:37+01:00 [Function: web-forum/internal/handlers.(*UserHandler).Login] [Line: 92] Bad Request

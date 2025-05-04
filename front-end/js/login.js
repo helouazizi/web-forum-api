@@ -1,4 +1,4 @@
-import { renderHomePage } from "./dom.js";
+import { showLoginForm } from "./dom.js";
 function login() {
   const loginFormElement = document.getElementById("login_form_element");
   loginFormElement.addEventListener("submit", async (e) => {
@@ -18,6 +18,9 @@ function login() {
       if (response.ok) {
         // renderHomePage();
         location.reload()
+      }else{
+        const errData = await response.json()
+        showLoginForm(errData)
       }
     } catch (err) {
       alert("Error: " + err.message);
