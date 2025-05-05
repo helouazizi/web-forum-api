@@ -1,13 +1,2 @@
-2025/05/04 18:23:59 2025-05-04T18:23:59+01:00 [Function: web-forum/internal/repository.(*UserRepository).GetUserInfo] [Line: 157] sql: no rows in result set
-2025/05/04 18:23:59 2025-05-04T18:23:59+01:00 [Function: web-forum/internal/handlers.(*UserHandler).GetUserInfo] [Line: 137] Internal Server Error
-2025/05/04 18:24:02 2025-05-04T18:24:02+01:00 [Function: web-forum/internal/repository.(*UserRepository).GetUserInfo] [Line: 157] sql: no rows in result set
-2025/05/04 18:24:02 2025-05-04T18:24:02+01:00 [Function: web-forum/internal/handlers.(*UserHandler).GetUserInfo] [Line: 137] Internal Server Error
-2025/05/04 18:24:02 2025-05-04T18:24:02+01:00 [Function: web-forum/internal/repository.(*UserRepository).GetUserInfo] [Line: 157] sql: no rows in result set
-2025/05/04 18:24:02 2025-05-04T18:24:02+01:00 [Function: web-forum/internal/handlers.(*UserHandler).GetUserInfo] [Line: 137] Internal Server Error
-2025/05/04 18:24:03 2025-05-04T18:24:03+01:00 [Function: web-forum/internal/repository.(*UserRepository).GetUserInfo] [Line: 157] sql: no rows in result set
-2025/05/04 18:24:03 2025-05-04T18:24:03+01:00 [Function: web-forum/internal/handlers.(*UserHandler).GetUserInfo] [Line: 137] Internal Server Error
-2025/05/04 18:24:49 2025-05-04T18:24:49+01:00 [Function: web-forum/internal/repository.(*UserRepository).GetUserInfo] [Line: 157] sql: no rows in result set
-2025/05/04 18:24:49 2025-05-04T18:24:49+01:00 [Function: web-forum/internal/handlers.(*UserHandler).GetUserInfo] [Line: 137] Internal Server Error
-2025/05/04 18:25:58 2025-05-04T18:25:58+01:00 [Function: web-forum/internal/repository.(*UserRepository).GetUserInfo] [Line: 157] sql: no rows in result set
-2025/05/04 18:25:58 2025-05-04T18:25:58+01:00 [Function: web-forum/internal/handlers.(*UserHandler).GetUserInfo] [Line: 137] Internal Server Error
-2025/05/04 18:27:50 2025-05-04T18:27:50+01:00 [Function: web-forum/internal/routers.SetupRoutes.AuthMiddleware.func1] [Line: 32] invalid token
+2025/05/05 18:14:39 2025-05-05T18:14:39+01:00 [Function: web-forum/internal/repository.(*UserRepository).GetUserInfo] [Line: 157] sql: no rows in result set
+2025/05/05 18:14:39 2025-05-05T18:14:39+01:00 [Function: web-forum/internal/handlers.(*UserHandler).GetUserInfo] [Line: 137] Internal Server Error

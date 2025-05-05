@@ -15,7 +15,7 @@ let Header = (user) => {
         </nav>
         
     `;
-    header.appendChild(userProfile(user))
+    header.appendChild(userProfile(user));
   } else {
     header.innerHTML = `
           <h1 class="logo"><a href="/front-end/">Forum</a></h1>
@@ -27,7 +27,6 @@ let Header = (user) => {
 
   return header;
 };
-
 
 let userProfile = (user) => {
   let underProfile = document.createElement("div");
@@ -45,12 +44,20 @@ let userProfile = (user) => {
       </div>
 
       <div class="profile-details">
-        <div class="detail-item"><strong>First Name:</strong> ${user.first_name}</div>
-        <div class="detail-item"><strong>Last Name:</strong> ${user.last_name}</div>
+        <div class="detail-item"><strong>First Name:</strong> ${
+          user.first_name
+        }</div>
+        <div class="detail-item"><strong>Last Name:</strong> ${
+          user.last_name
+        }</div>
         <div class="detail-item"><strong>Gender:</strong> ${user.gender}</div>
         <div class="detail-item"><strong>Age:</strong> ${user.age}</div>
-        <div class="detail-item"><strong>Created At:</strong> ${new Date(user.created_at).toLocaleString()}</div>
-        <div class="detail-item"><strong>Updated At:</strong> ${new Date(user.updated_at).toLocaleString()}</div>
+        <div class="detail-item"><strong>Created At:</strong> ${new Date(
+          user.created_at
+        ).toLocaleString()}</div>
+        <div class="detail-item"><strong>Updated At:</strong> ${new Date(
+          user.updated_at
+        ).toLocaleString()}</div>
       </div>
 
       <div class="profile-actions">
@@ -62,7 +69,6 @@ let userProfile = (user) => {
 
   return underProfile;
 };
-
 
 let loginForm = (errrors = {}) => {
   let form = document.createElement("div");
@@ -150,51 +156,61 @@ let registerForm = (errrors = {}) => {
   return form;
 };
 
-let postCard = () => {
-  let post = document.createElement("div");
-  post.setAttribute("class", "post-card");
-  post.innerHTML = `
-            <div class="post-header">
-              <img
-                src="./assets/avatar.png"
-                alt="User Profile"
-                class="profile-pic"
-              />
-              <div class="user-info">
-                <h4 class="username">John Doe</h4>
-                <span class="post-date">Posted on 2025-05-02</span>
-              </div>
-            </div>
+let postCard = (post) => {
+  let postElement = document.createElement("div");
+  postElement.setAttribute("class", "post-card");
 
-            <div class="post-body">
-              <h3 class="post-title">Post Title Here</h3>
-              <p class="post-content">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus
-                lacinia odio vitae vestibulum.
-              </p>
-            </div>
-            <div class="post-categories">
-              <span class="category-tag">Technology</span>
-              <span class="category-tag">Science</span>
-              <span class="category-tag">Health</span>
-            </div>            
-            <div class="comment-section">
-              <input type="text" placeholder="Write a comment..." class="comment-input" />
-              <button class="comment-button"><i class="fa-solid fa-paper-plane"></i></button>
-            </div>
-            <div class="post-footer">
-              <span><i class="fa-solid fa-thumbs-up"></i> 12</span>
-              <span><i class="fa-solid fa-thumbs-down"></i> 3</span>
-              <span><i class="fa-solid fa-comment"></i> 5</span>
-            </div>
-    `;
-  return post;
+  // Format the date
+  const date = new Date(post.CreatedAt).toLocaleDateString();
+
+  // Convert categories array to HTML span elements
+  const categoryTags = post.categories
+    .map((cat) => `<span class="category-tag">${cat}</span>`)
+    .join("");
+
+  postElement.innerHTML = `
+    <div class="post-header">
+      <img
+        src="./assets/avatar.png"
+        alt="User Profile"
+        class="profile-pic"
+      />
+      <div class="user-info">
+        <h4 class="username">${post.Creator}</h4>
+        <span class="post-date">Posted on ${date}</span>
+        <span  class="hidden" id="post-id">${post.ID}</span>
+      </div>
+    </div>
+
+    <div class="post-body">
+      <h3 class="post-title">${post.title}</h3>
+      <p class="post-content">
+        ${post.content}
+      </p>
+    </div>
+
+    <div class="post-categories">
+      ${categoryTags}
+    </div>
+
+    <div class="comment-section">
+      <input type="text" placeholder="Write a comment..." class="comment-input" />
+      <button class="comment-button"><i class="fa-solid fa-paper-plane"></i></button>
+    </div>
+
+    <div class="post-footer">
+      <span><i class="fa-solid fa-thumbs-up"></i> ${post.TotalLikes}</span>
+      <span><i class="fa-solid fa-thumbs-down"></i> ${post.TotalDislikes}</span>
+      <span><i class="fa-solid fa-comment"></i> ${post.TotalComments}</span>
+    </div>
+  `;
+
+  return postElement;
 };
 
-let postForm = (errors={}) => {
+let postForm = (errors = {}) => {
   // let careate our form
-  console.log(errors,"from comp");
-  
+
   let form = document.createElement("div");
   form.setAttribute("class", "modal-overlay");
   form.setAttribute("id", "post_form");

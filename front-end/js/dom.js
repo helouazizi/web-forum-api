@@ -9,7 +9,15 @@ import {
   Footer,
 } from "./componnents.js";
 
-import { isAouth, logOut, createPost } from "./api.js";
+import {
+  isAouth,
+  logOut,
+  createPost,
+  fetchPosts,
+  reactToPost,
+  sendPostCommen,
+  showComments
+} from "./api.js";
 
 // this function diplay the login form
 function bindLoginBtn() {
@@ -77,7 +85,6 @@ function showRegisterForm(errors = {}) {
 
 // this function diplay the craete post form
 function showPostForm(errors = {}, openImmediately = false) {
-
   const craete_post_btn = document.getElementById("craete_post_btn");
   if (!craete_post_btn && !openImmediately) return;
 
@@ -111,17 +118,10 @@ function showPostForm(errors = {}, openImmediately = false) {
 function removeOldeForms() {
   let allforms = document.querySelectorAll(".modal-overlay"); // add dot to select by class
   if (allforms.length > 0) {
-    console.log(allforms, "form");
     allforms.forEach((form) => {
       form.remove();
     });
   }
-}
-
-
-function getCookie(name) {
-  const match = document.cookie.match(new RegExp("(^| )" + name + "=([^;]+)"));
-  return match ? match[2] : null;
 }
 
 async function renderHomePage() {
@@ -131,11 +131,15 @@ async function renderHomePage() {
   document.getElementById("register_form")?.remove();
   document.getElementById("container")?.classList.remove("modal-active");
   document.body.appendChild(Header(user));
-
+  bindLoginBtn();
+  bindRegisterbtn();
+  showPostForm();
   if (user) {
     showProfile();
     logOut();
   }
+
+  let postsFromdb = await fetchPosts();
 
   let main = document.createElement("main");
   let section = document.createElement("section");
@@ -143,13 +147,21 @@ async function renderHomePage() {
   section.setAttribute("id", "container");
   let posts = document.createElement("div");
   posts.setAttribute("class", "posts");
-  for (let i = 0; i < 10; i++) {
-    posts.appendChild(postCard());
+
+  if (!postsFromdb) {
+    posts.textContent = "No posts yet.";
+  } else {
+    postsFromdb.forEach((post) => {
+      posts.appendChild(postCard(post));
+    });
   }
+
   section.appendChild(posts);
   main.appendChild(section);
   document.body.appendChild(main);
   document.body.appendChild(Footer());
+
+  postActions();
 }
 
 function showMessage(message) {
@@ -184,6 +196,47 @@ function showErrorPage(error) {
   `;
 }
 
+function postActions() {
+  document.querySelectorAll(".post-card").forEach((postCard) => {
+    const postId = postCard.querySelector("#post-id")?.textContent;
+
+    // Like
+    postCard.querySelector(".fa-thumbs-up")?.addEventListener("click", () => {
+      console.log("User liked post:", postId);
+      reactToPost(postId, "like");
+      renderHomePage();
+    });
+
+    // Dislike
+    postCard.querySelector(".fa-thumbs-down")?.addEventListener("click", () => {
+      console.log("User disliked post:", postId);
+      // callDislikeAPI(postId);
+      reactToPost(postId, "dislike");
+      renderHomePage();
+    });
+
+    // Show comments
+    postCard.querySelector(".fa-comment")?.addEventListener("click", () => {
+      console.log("User wants to view comments for post:", postId);
+      showComments(postId,postCard);
+    });
+
+    // Send comment
+    const sendBtn = postCard.querySelector(".comment-button");
+    const input = postCard.querySelector(".comment-input");
+
+    sendBtn?.addEventListener("click", () => {
+      const comment = input.value.trim();
+      if (comment !== "") {
+        console.log("User commented on post:", postId, "Comment:", comment);
+        input.value = "";
+        sendPostCommen(postId, comment);
+        renderHomePage();
+      }
+    });
+  });
+}
+
 export {
   renderHomePage,
   showLoginForm,
@@ -193,4 +246,5 @@ export {
   bindLoginBtn,
   showMessage,
   showErrorPage,
+  postActions,
 };

@@ -1,8 +1,6 @@
 package services
 
 import (
-	"net/http"
-
 	"web-forum/internal/models"
 	"web-forum/internal/repository"
 )
@@ -17,14 +15,5 @@ func NewHomeService(repo repository.Home) *HomeService {
 
 func (s *HomeService) Home() ([]models.Post, models.Error) {
 	Posts, err := s.repo.FetchAllPosts()
-	if err.Code != http.StatusOK {
-		return nil, models.Error{
-			Message: "Internal server error",
-			Code:    http.StatusInternalServerError,
-		}
-	}
-	return Posts, models.Error{
-		Message: "seccefully fetched data",
-		Code:    http.StatusOK,
-	}
+	return Posts, err
 }

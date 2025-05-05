@@ -8,7 +8,6 @@ import (
 )
 
 func SetupRoutes(h *app.Application) *http.ServeMux {
-
 	mux := http.DefaultServeMux
 
 	// the home route
@@ -23,7 +22,9 @@ func SetupRoutes(h *app.Application) *http.ServeMux {
 
 	// this routs for posts
 	mux.Handle("/api/v1/posts/create", middlewares.AuthMiddleware(http.HandlerFunc(h.PostHandler.CreatePost), h.DB))
-	// http.HandleFunc("/users/update", h.UserHandler.UpdateUser)
+	mux.Handle("/api/v1/posts/react", middlewares.AuthMiddleware(http.HandlerFunc(h.PostHandler.ReactToPost), h.DB))
+	mux.Handle("/api/v1/posts/addComment", middlewares.AuthMiddleware(http.HandlerFunc(h.PostHandler.CommentPost), h.DB))
+	mux.Handle("/api/v1/posts/fetchComments", middlewares.AuthMiddleware(http.HandlerFunc(h.PostHandler.FetchComments), h.DB))
 	// http.HandleFunc("/users", h.UserHandler.ListUsers)
 
 	return mux

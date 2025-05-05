@@ -27,7 +27,7 @@ main {
 
 .posts {
   display: flex;
- flex-direction: column;
+  flex-direction: column;
   gap: 1.5rem;
   padding: 2rem 0rem;
   max-width: 600px;
@@ -90,6 +90,7 @@ main {
   font-size: 1rem;
   line-height: 1.4;
   color: #444;
+  overflow-wrap: break-word;
 }
 
 .post-footer {
@@ -105,9 +106,8 @@ main {
   font-size: large;
 }
 .post-footer i:hover {
-  color:#0056b3;
+  color: #0056b3;
 }
-
 
 /* CATEGORIES */
 
@@ -127,7 +127,6 @@ main {
   background-color: #555;
   cursor: default;
 }
-
 
 /* COMMENTS */
 
@@ -165,9 +164,6 @@ main {
   font-size: 1rem;
 }
 
-
-
-
 /* Responsive 2-column grid on wider screens */
 @media (min-width: 768px) {
   .posts {
@@ -177,8 +173,8 @@ main {
 
 /* Responsive 2-column grid on wider screens */
 @media (max-width: 425px) {
-  header,main {
+  header,
+  main {
     padding: 10px 5%;
   }
 }
-

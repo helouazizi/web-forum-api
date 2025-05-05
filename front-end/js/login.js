@@ -1,4 +1,4 @@
-import { showLoginForm, showErrorPage } from "./dom.js";
+import { showLoginForm, showErrorPage, renderHomePage } from "./dom.js";
 function login() {
   const loginFormElement = document.getElementById("login_form_element");
   loginFormElement.addEventListener("submit", async (e) => {
@@ -27,7 +27,7 @@ function login() {
         };
         throw error;
       }
-      location.reload();
+      renderHomePage()
     } catch (err) {
       showErrorPage(err);
     }

@@ -3,14 +3,28 @@ package models
 import "time"
 
 type Post struct {
-	ID            int       `json:"id"`
-	UserID        int       `json:"user_id"`
-	Title         string    `json:"title"`
-	Content       string    `json:"content"`
-	CreatedAt     time.Time `json:"created_at"`
-	UpdatedAt     time.Time `json:"updated_at"`
-	TotalLikes    int       `json:"total_likes"`
-	TotalDislikes int       `json:"total_dislikes"`
-	TotalComments int       `json:"total_comments"`
-	Categories    []string  `json:"categories"`
+	ID            int
+	UserID        int
+	Creator       string
+	CreatedAt     time.Time
+	UpdatedAt     time.Time
+	TotalLikes    int
+	TotalDislikes int
+	TotalComments int
+	Title         string   `json:"title"`
+	Content       string   `json:"content"`
+	Categories    []string `json:"categories"`
+}
+
+type PostReaction struct {
+	PostID   int    `json:"post_id"`
+	Reaction string `json:"reaction"`
+	Comment  string `json:"comment"`
+}
+
+type PostComments struct {
+	Id        string
+	Creator   string
+	Content   string
+	CreatedAt time.Time
 }

@@ -40,9 +40,9 @@ function logOut() {
         );
 
         if (response.ok) {
-          // renderHomePage();
+          renderHomePage();
           // showLoginForm();
-          location.reload();
+          // location.reload();
         } else {
           const errorData = await response.json();
           console.error(
@@ -77,9 +77,6 @@ function createPost() {
       content,
       categories,
     };
-
-    console.log(postData, "befor submition post");
-
     try {
       const response = await fetch(
         "http://localhost:3000/api/v1/posts/create",
@@ -95,10 +92,8 @@ function createPost() {
 
       if (!response.ok) {
         const errorData = await response.json();
-        console.log(errorData.UserErrors, "from api");
         if (errorData.UserErrors.HasError) {
           showPostForm(errorData.UserErrors, true);
-          console.log("heeeere");
           return;
         }
         if (errorData.Code === 401) {
@@ -114,12 +109,135 @@ function createPost() {
       const result = await response.json();
       showMessage(result.Message);
       setTimeout(() => {
-        location.reload();
-      }, 3000);
+        renderHomePage();
+      }, 2000);
     } catch (err) {
       showErrorPage(err);
     }
   });
 }
 
-export { isAouth, logOut, createPost };
+async function fetchPosts() {
+  try {
+    const response = await fetch("http://localhost:3000/");
+    if (!response.ok) {
+      let err = {
+        code: response.status,
+        message: response.statusText,
+      };
+      throw err;
+    }
+
+    const posts = await response.json();
+
+    return posts;
+  } catch (error) {
+    showErrorPage(error);
+  }
+}
+
+async function reactToPost(postId, reaction) {
+  try {
+    const response = await fetch("http://localhost:3000/api/v1/posts/react", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        post_id: parseInt(postId),
+        reaction: reaction,
+      }),
+    });
+
+    if (!response.ok) {
+      const errData = await response.json();
+      let err = {
+        code: errData.Code,
+        message: errData.Message,
+      };
+      throw err;
+    }
+    console.log("reaction handleed seccefully");
+
+    // const data = await response.json();
+    // console.log("Like registered:", data);
+    // // Optionally update UI here
+  } catch (error) {
+    showErrorPage(error);
+  }
+}
+async function sendPostCommen(postId, commenttext) {
+  console.log(postId, commenttext, "hhhh");
+
+  try {
+    const response = await fetch("http://localhost:3000/api/v1/posts/addComment", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        post_id: parseInt(postId),
+        comment: commenttext,
+      }),
+    });
+
+    if (!response.ok) {
+      const errData = await response.json();
+      let err = {
+        code: errData.Code,
+        message: errData.Message,
+      };
+      throw err;
+    }
+    let res = await response.json();
+    showMessage(res.Message);
+
+    console.log("Comment submitted successfully:");
+    // Optionally update the UI here
+  } catch (error) {
+    showErrorPage(error);
+  }
+}
+
+async function showComments(postId, container) {
+  try {
+    const response = await fetch(
+      `"http://localhost:3000/api/fetchComments?postId=${postId}`
+    );
+    if (!response.ok) {
+      const errData = await response.json();
+      let err = {
+        code: errData.Code,
+        message: errData.Message,
+      };
+      throw err;
+    }
+    const comments = await response.json();
+
+    const commentsContainer = document.createElement("div");
+    commentsContainer.className = "comments-list";
+
+    comments.forEach((comment) => {
+      const commentEl = document.createElement("div");
+      commentEl.className = "comment-item";
+      commentEl.textContent = `${comment.user}: ${comment.text}`;
+      commentsContainer.appendChild(commentEl);
+    });
+
+    container.appendChild(commentsContainer);
+  } catch (error) {
+    showErrorPage(error);
+  }
+}
+
+export {
+  isAouth,
+  logOut,
+  createPost,
+  fetchPosts,
+  reactToPost,
+  sendPostCommen,
+  showComments,
+};
