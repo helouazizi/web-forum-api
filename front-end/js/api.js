@@ -204,7 +204,7 @@ async function sendPostCommen(postId, commenttext) {
 async function showComments(postId, container) {
   try {
     const response = await fetch(
-      `"http://localhost:3000/api/fetchComments?postId=${postId}`
+      `http://localhost:3000/api/v1/posts/fetchComments?postId=${postId}`
     );
     if (!response.ok) {
       const errData = await response.json();

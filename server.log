@@ -1,2 +1,10 @@
 2025/05/05 18:14:39 2025-05-05T18:14:39+01:00 [Function: web-forum/internal/repository.(*UserRepository).GetUserInfo] [Line: 157] sql: no rows in result set
 2025/05/05 18:14:39 2025-05-05T18:14:39+01:00 [Function: web-forum/internal/handlers.(*UserHandler).GetUserInfo] [Line: 137] Internal Server Error
+2025/05/05 19:04:52 2025-05-05T19:04:52+01:00 [Function: web-forum/internal/routers.SetupRoutes.AuthMiddleware.func4] [Line: 18] Token not found or invalid
+2025/05/05 19:05:04 2025-05-05T19:05:04+01:00 [Function: web-forum/internal/handlers.(*UserHandler).GetUserInfo] [Line: 130] Token not found or invalid
+2025/05/05 19:05:18 2025-05-05T19:05:18+01:00 [Function: web-forum/internal/routers.SetupRoutes.AuthMiddleware.func4] [Line: 18] Token not found or invalid
+2025/05/05 19:07:11 2025-05-05T19:07:11+01:00 [Function: web-forum/internal/routers.SetupRoutes.AuthMiddleware.func4] [Line: 18] Token not found or invalid
+2025/05/05 19:07:56 2025-05-05T19:07:56+01:00 [Function: web-forum/internal/routers.SetupRoutes.AuthMiddleware.func4] [Line: 18] Token not found or invalid
+2025/05/05 19:08:25 2025-05-05T19:08:25+01:00 [Function: web-forum/internal/handlers.(*UserHandler).GetUserInfo] [Line: 130] Token not found or invalid
+2025/05/05 19:08:26 2025-05-05T19:08:26+01:00 [Function: web-forum/internal/handlers.(*UserHandler).GetUserInfo] [Line: 130] Token not found or invalid
+2025/05/05 19:09:49 2025-05-05T19:09:49+01:00 [Function: web-forum/internal/routers.SetupRoutes.AuthMiddleware.func4] [Line: 18] Token not found or invalid

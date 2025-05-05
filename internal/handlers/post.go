@@ -186,7 +186,7 @@ func (h *PostHandler) FetchComments(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		utils.RespondWithJSON(w, http.StatusInternalServerError, models.Error{
 			Message: "Failed to fetch comments",
-			Code:    http.StatusInternalServerError,
+			Code:    http.StatusBadRequest,
 		})
 		return
 	}

@@ -12,7 +12,6 @@ import (
 
 func AuthMiddleware(next http.Handler, db *sql.DB) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-
 		token, err := utils.GetToken(r, "Token")
 		if err.Code != http.StatusOK {
 			logger.LogWithDetails(fmt.Errorf(err.Message))
