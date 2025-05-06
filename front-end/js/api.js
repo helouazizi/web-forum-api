@@ -4,6 +4,7 @@ import {
   showLoginForm,
   showMessage,
   showPostForm,
+  renderComments
 } from "./dom.js";
 async function isAouth() {
   try {
@@ -128,8 +129,7 @@ async function fetchPosts() {
       throw err;
     }
 
-    const posts = await response.json();
-
+    const posts = await response.json();    
     return posts;
   } catch (error) {
     showErrorPage(error);
@@ -158,11 +158,7 @@ async function reactToPost(postId, reaction) {
       };
       throw err;
     }
-    console.log("reaction handleed seccefully");
-
-    // const data = await response.json();
-    // console.log("Like registered:", data);
-    // // Optionally update UI here
+    return true
   } catch (error) {
     showErrorPage(error);
   }
@@ -208,32 +204,19 @@ async function showComments(postId, container) {
   try {
     const response = await fetch(
       `http://localhost:3000/api/v1/posts/fetchComments?postId=${postId}`,
-      {
-        credentials: "include",
-      }
+      { credentials: "include" }
     );
+
     if (!response.ok) {
       const errData = await response.json();
-      let err = {
-        code: errData.Code,
-        message: errData.Message,
-      };
-      throw err;
+      throw { code: errData.Code, message: errData.Message };
     }
-    const comments = await response.json();
-    console.log(comments, "comments");
-    if (!comments) return;
-    const commentsContainer = document.createElement("div");
-    commentsContainer.className = "comments-list";
-    container.getElementsByClassName("comments-list")[0]?.remove();
-    comments.forEach((comment) => {
-      const commentEl = document.createElement("div");
-      commentEl.className = "comment-item";
-      commentEl.textContent = `${comment.Creator}: ${comment.Content}`;
-      commentsContainer.appendChild(commentEl);
-    });
 
-    container.appendChild(commentsContainer);
+    const comments = await response.json();
+    if (!comments) return;
+    console.log(comments);
+    
+    renderComments(comments, postId,container);
   } catch (error) {
     showErrorPage(error);
   }

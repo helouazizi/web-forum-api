@@ -199,9 +199,9 @@ let postCard = (post) => {
     </div>
 
     <div class="post-footer">
-      <span><i class="fa-solid fa-thumbs-up"></i> ${post.TotalLikes}</span>
-      <span><i class="fa-solid fa-thumbs-down"></i> ${post.TotalDislikes}</span>
-      <span><i class="fa-solid fa-comment"></i> ${post.TotalComments}</span>
+      <span><i class="fa-solid fa-thumbs-up"></i> <span class="like-count">${post.TotalLikes}</span></span>
+      <span><i class="fa-solid fa-thumbs-down"></i> <span class="dislike-count">${post.TotalDislikes}</span></span>
+      <span><i class="fa-solid fa-comment"></i> <span class="comment-count">${post.TotalComments}</span></span>
     </div>
   `;
 

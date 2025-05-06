@@ -185,6 +185,12 @@ func (r *PostRepository) AddComment(token string, reaction models.PostReaction) 
 		return models.Error{Message: "Failed to add comment", Code: http.StatusInternalServerError}
 	}
 
+	query1 := `UPDATE posts SET total_comments = total_comments + 1 WHERE id = ?`
+	_, err = r.db.Exec(query1, reaction.PostID)
+	if err != nil {
+		logger.LogWithDetails(fmt.Errorf("failed to insert comment: %v", err))
+		return models.Error{Message: "Failed to add comment", Code: http.StatusInternalServerError}
+	}
 	return models.Error{Message: "Comment added successfully", Code: http.StatusOK}
 }
 

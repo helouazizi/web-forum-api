@@ -16,7 +16,7 @@ import {
   fetchPosts,
   reactToPost,
   sendPostCommen,
-  showComments
+  showComments,
 } from "./api.js";
 
 // this function diplay the login form
@@ -195,30 +195,106 @@ function showErrorPage(error) {
     </div>
   `;
 }
+function renderComments(comments, postId,post) {
+  // Remove existing panel if open
+  document.getElementById("comment-panel")?.remove();
+
+  // Create panel
+  const panel = document.createElement("div");
+  panel.id = "comment-panel";
+  panel.className = "comment-panel";
+
+  // Header with close button
+  const header = document.createElement("div");
+  header.className = "comment-header";
+
+  const title = document.createElement("h3");
+  title.textContent = `Comments for Post #${postId}`;
+  header.appendChild(title);
+
+  const closeBtn = document.createElement("button");
+  closeBtn.textContent = "✖";
+  closeBtn.className = "close-comment-panel";
+  closeBtn.addEventListener("click", () => panel.remove());
+  header.appendChild(closeBtn);
+
+  panel.appendChild(header);
+
+  // Comment list
+  const list = document.createElement("div");
+  list.className = "comment-container";
+
+  if (comments.length === 0) {
+    const empty = document.createElement("p");
+    empty.textContent = "No comments yet.";
+    empty.className = "no-comments";
+    list.appendChild(empty);
+  } else {
+    comments.forEach((comment) => {
+      const commentEl = document.createElement("div");
+      commentEl.className = "comment-item";
+      commentEl.innerHTML = `<strong>${comment.Creator}</strong>: ${comment.Content}`;
+      list.appendChild(commentEl);
+    });
+  }
+
+  panel.appendChild(list);
+  post.appendChild(panel);
+}
 
 function postActions() {
   document.querySelectorAll(".post-card").forEach((postCard) => {
     const postId = postCard.querySelector("#post-id")?.textContent;
-
     // Like
     postCard.querySelector(".fa-thumbs-up")?.addEventListener("click", () => {
-      console.log("User liked post:", postId);
-      reactToPost(postId, "like");
-      // renderHomePage();
+      const likeIcon = postCard.querySelector(".fa-thumbs-up");
+      const countSpan = postCard.querySelector(".like-count");
+      let currentCount = parseInt(countSpan.textContent, 10) || 0;
+
+      const alreadyLiked = likeIcon.classList.contains("liked");
+
+      if (alreadyLiked) {
+        let unlike = reactToPost(postId, "dislike");
+        if (unlike) {
+          likeIcon.classList.remove("liked");
+          countSpan.textContent = Math.max(0, currentCount - 1);
+        }
+      } else {
+        let like = reactToPost(postId, "like");
+        if (like) {
+          likeIcon.classList.add("liked");
+          countSpan.textContent = currentCount + 1;
+        }
+      }
     });
 
     // Dislike
     postCard.querySelector(".fa-thumbs-down")?.addEventListener("click", () => {
-      console.log("User disliked post:", postId);
-      // callDislikeAPI(postId);
-      reactToPost(postId, "dislike");
-      // renderHomePage();
+      const dislikeIcon = postCard.querySelector(".fa-thumbs-down");
+      const countSpan = postCard.querySelector(".dislike-count");
+      let currentCount = parseInt(countSpan.textContent, 10) || 0;
+
+      const alreadyDisliked = dislikeIcon.classList.contains("disliked");
+
+      if (alreadyDisliked) {
+        let undo = reactToPost(postId, "dislike");
+        if (undo) {
+          dislikeIcon.classList.remove("disliked");
+          countSpan.textContent = Math.max(0, currentCount - 1);
+        }
+      } else {
+        let dislike = reactToPost(postId, "dislike");
+        if (dislike) {
+          dislikeIcon.classList.add("disliked");
+          countSpan.textContent = currentCount + 1;
+        }
+      }
     });
 
     // Show comments
     postCard.querySelector(".fa-comment")?.addEventListener("click", () => {
       console.log("User wants to view comments for post:", postId);
-      showComments(postId,postCard);
+      showComments(postId, postCard);
     });
 
     // Send comment
@@ -230,8 +306,12 @@ function postActions() {
       if (comment !== "") {
         console.log("User commented on post:", postId, "Comment:", comment);
         input.value = "";
-        sendPostCommen(postId, comment);
-        // renderHomePage();
+        let commented = sendPostCommen(postId, comment);
+        if (commented) {
+          let commentCount = postCard.querySelector(".comment-count");
+          let currentCount = parseInt(commentCount.textContent, 10) || 0;
+          commentCount.textContent = currentCount + 1;
+        }
       }
     });
   });
@@ -247,4 +327,5 @@ export {
   showMessage,
   showErrorPage,
   postActions,
+  renderComments,
 };
