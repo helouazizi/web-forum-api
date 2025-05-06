@@ -116,12 +116,33 @@ header {
   transition: background 0.3s ease;
 }
 
+.header-center-buttons {
+  width: 50%;
+  justify-content: space-evenly;
+  display: flex;
+  align-items: center;
+}
+
+.header-center-buttons i {
+  font-size: x-large;
+  color: #007bffa6;
+  cursor: pointer;
+  transition: border-bottom 0.3s ease;
+  padding-bottom: 2px;
+}
+
+.header-center-buttons i:hover {
+  border-bottom: 2px solid #007bff;
+}
+
+
 /* Responsive 2-column grid on wider screens */
-@media (max-width: 425px) {
-  .new_post_btn {
+@media (max-width: 768px) {
+  .header-center-buttons {
+    width: 100%;
     position: fixed;
-    bottom: 5rem;
-    right: 1rem;
+    bottom: 0;
+    right: 0;
     font-size: 1rem;
     border: none;
     background-color: var(--primary-color);

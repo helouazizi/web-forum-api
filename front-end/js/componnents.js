@@ -1,32 +1,76 @@
+// let Header = (user) => {
+//   let header = document.createElement("header");
+//   if (user) {
+//     header.innerHTML = `
+//         <h1 class="logo"><a href="/front-end/">Forum</a></h1>
+//         <div>
+//         <button class="primary-btn new_post_btn" id="craete_post_btn"><i class="fas fa-plus"></i><span>New Post</span></button>
+//         // i nedd filter button 
+//         // i need chat button
+//         </div>
+//         <nav class="navigation-links">
+              
+//               <div class="user-profile " id="user-profile" >
+//                 <img
+//                   src="./assets/avatar.png"
+//                   alt="User Profile"
+//                   class="profile-pic"
+//                 />
+//               </div>
+//         </nav>
+        
+//     `;
+//     header.appendChild(userProfile(user));
+//   } else {
+//     header.innerHTML = `
+//           <h1 class="logo"><a href="/front-end/">Forum</a></h1>
+//           <nav class="navigation-links">
+//                 <button class="primary-btn" id="login_btn"><i class="fas fa-sign-in-alt"></i> Login</button>
+//           </nav>
+//       `;
+//   }
+
+//   return header;
+// };
+
 let Header = (user) => {
   let header = document.createElement("header");
+
   if (user) {
     header.innerHTML = `
-        <h1 class="logo"><a href="/front-end/">Forum</a></h1>
-        <nav class="navigation-links">
-              <button class="primary-btn new_post_btn" id="craete_post_btn"><i class="fas fa-plus"></i><span>New Post</span></button>
-              <div class="user-profile " id="user-profile" >
-                <img
-                  src="./assets/avatar.png"
-                  alt="User Profile"
-                  class="profile-pic"
-                />
-              </div>
-        </nav>
-        
+      <h1 class="logo"><a href="/front-end/">Forum</a></h1>
+      <div class="header-center-buttons">
+       <button class="primary-btn new_post_btn" id="craete_post_btn">
+       <i class="fas fa-plus"></i>
+       </button>
+        <button class="primary-btn  filter_btn" id="filter_btn">
+          <i class="fas fa-filter"></i>
+        </button>
+        <button class="primary-btn  chat_btn" id="chat_btn">
+          <i class="fas fa-comments"></i>
+        </button>
+      </div>
+      <nav class="navigation-links">
+        <div class="user-profile" id="user-profile">
+          <img src="./assets/avatar.png" alt="User Profile" class="profile-pic" />
+        </div>
+      </nav>
     `;
     header.appendChild(userProfile(user));
   } else {
     header.innerHTML = `
-          <h1 class="logo"><a href="/front-end/">Forum</a></h1>
-          <nav class="navigation-links">
-                <button class="primary-btn" id="login_btn"><i class="fas fa-sign-in-alt"></i> Login</button>
-          </nav>
-      `;
+      <h1 class="logo"><a href="/front-end/">Forum</a></h1>
+      <nav class="navigation-links">
+        <button class="primary-btn" id="login_btn">
+          <i class="fas fa-sign-in-alt"></i> Login
+        </button>
+      </nav>
+    `;
   }
 
   return header;
 };
+
 
 let userProfile = (user) => {
   let underProfile = document.createElement("div");
