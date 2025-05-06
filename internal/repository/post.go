@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"net/http"
+	"strings"
 
 	"web-forum/internal/models"
 	"web-forum/pkg/logger"
@@ -15,6 +16,7 @@ type PostsMethods interface {
 	ReactToPost(token string, post models.PostReaction) models.Error
 	AddComment(token string, reaction models.PostReaction) models.Error
 	GetCommentsByPostID(postId int) ([]models.PostComments, models.Error)
+	FilterPosts(categories []string) ([]models.Post, models.Error)
 }
 
 type PostRepository struct {
@@ -221,3 +223,91 @@ func (r *PostRepository) GetCommentsByPostID(postId int) ([]models.PostComments,
 
 	return comments, models.Error{Code: http.StatusOK}
 }
+
+func (r *PostRepository) FilterPosts(categories []string) ([]models.Post, models.Error) {
+	// Handle case when no categories are passed
+	// if len(categories) == 0 {
+	// 	return nil, models.Error{
+	// 		Message: "No categories provided",
+	// 		Code:    http.StatusBadRequest,
+	// 	}
+	// }
+
+	// Prepare query placeholders
+	placeholders := make([]string, len(categories))
+	args := make([]any, len(categories))
+	for i, category := range categories {
+		placeholders[i] = "?"
+		args[i] = category
+	}
+	placeholderStr := strings.Join(placeholders, ",")
+
+	query := fmt.Sprintf(`
+		SELECT 
+			posts.id, 
+			posts.user_id, 
+			posts.title, 
+			posts.content, 
+			posts.created_at, 
+			posts.updated_at, 
+			posts.total_likes, 
+			posts.total_dislikes, 
+			posts.total_comments,
+			users.nickname,
+			GROUP_CONCAT(categories.category_name) AS categories
+		FROM posts
+		JOIN users ON posts.user_id = users.id
+		LEFT JOIN post_categories ON posts.id = post_categories.post_id
+		LEFT JOIN categories ON post_categories.category_id = categories.id
+		WHERE categories.category_name IN (%s)
+		GROUP BY posts.id
+		ORDER BY posts.created_at DESC
+	`, placeholderStr)
+
+	rows, err := r.db.Query(query, args...)
+	if err != nil {
+		logger.LogWithDetails(err)
+		return nil, models.Error{
+			Message: "Failed to filter posts",
+			Code:    http.StatusInternalServerError,
+		}
+	}
+	defer rows.Close()
+
+	var posts []models.Post
+	for rows.Next() {
+		var post models.Post
+		var categoryStr string
+
+		err := rows.Scan(
+			&post.ID,
+			&post.UserID,
+			&post.Title,
+			&post.Content,
+			&post.CreatedAt,
+			&post.UpdatedAt,
+			&post.TotalLikes,
+			&post.TotalDislikes,
+			&post.TotalComments,
+			&post.Creator,
+			&categoryStr, // temporary string for GROUP_CONCAT
+		)
+		if err != nil {
+			logger.LogWithDetails(err)
+			return nil, models.Error{
+				Message: "Error scanning post row",
+				Code:    http.StatusInternalServerError,
+			}
+		}
+
+		// Convert comma-separated string into []string
+		if categoryStr != "" {
+			post.Categories = strings.Split(categoryStr, ",")
+		}
+
+		posts = append(posts, post)
+	}
+
+	return posts, models.Error{Code: http.StatusOK}
+}
+

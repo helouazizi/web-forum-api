@@ -7,6 +7,7 @@ import {
   postCard,
   Header,
   Footer,
+  filterForm,
 } from "./componnents.js";
 
 import {
@@ -17,6 +18,7 @@ import {
   reactToPost,
   sendPostCommen,
   showComments,
+  fetchFilteredPosts,
 } from "./api.js";
 
 // this function diplay the login form
@@ -124,11 +126,11 @@ function removeOldeForms() {
   }
 }
 
-async function renderHomePage() {
+async function renderHomePage(data) {
+  
   let user = await isAouth();
   document.body.innerHTML = "";
-  document.getElementById("login_form")?.remove();
-  document.getElementById("register_form")?.remove();
+  removeOldeForms();
   document.getElementById("container")?.classList.remove("modal-active");
   document.body.appendChild(Header(user));
   bindLoginBtn();
@@ -137,10 +139,12 @@ async function renderHomePage() {
   if (user) {
     showProfile();
     logOut();
+    bindfiletrBtn();
   }
-
-  let postsFromdb = await fetchPosts();
-
+  if (!data) {
+    data = await fetchPosts();
+  }
+  // let posts = await fetchPosts();
   let main = document.createElement("main");
   let section = document.createElement("section");
   section.setAttribute("class", "container");
@@ -148,10 +152,10 @@ async function renderHomePage() {
   let posts = document.createElement("div");
   posts.setAttribute("class", "posts");
 
-  if (!postsFromdb) {
+  if (!data) {
     posts.textContent = "No posts yet.";
   } else {
-    postsFromdb.forEach((post) => {
+    data.forEach((post) => {
       posts.appendChild(postCard(post));
     });
   }
@@ -195,7 +199,8 @@ function showErrorPage(error) {
     </div>
   `;
 }
-function renderComments(comments, postId,post) {
+
+function renderComments(comments, postId, post) {
   // Remove existing panel if open
   document.getElementById("comment-panel")?.remove();
 
@@ -317,6 +322,39 @@ function postActions() {
   });
 }
 
+function bindfiletrBtn() {
+  const filter_btn = document.getElementById("filter_btn");
+  if (filter_btn) {
+    filter_btn.addEventListener("click", (e) => {
+      showFilterForm();
+    });
+  }
+}
+function showFilterForm() {
+  document.getElementById("categoryFilterPanel")?.remove();
+  let form = filterForm();
+  document.body.appendChild(form);
+  // Handle close
+  const closeBtn = form.querySelector(".close-filter-btn");
+  closeBtn.addEventListener("click", () => {
+    form.remove();
+  });
+
+  // Handle filter submit
+  const submitBtn = document.getElementById("applyFilter");
+  submitBtn.addEventListener("click",async (e) => {
+    e.preventDefault();
+    const checked = form.querySelectorAll("input[name='categories']:checked");
+    const selectedCategories = Array.from(checked).map((input) => input.value);
+
+    console.log("Selected categories:", selectedCategories);
+    const posts = await fetchFilteredPosts(selectedCategories);
+    renderHomePage(posts);
+
+    form.remove(); // Optional: remove popup after applying
+  });
+}
+
 export {
   renderHomePage,
   showLoginForm,
@@ -324,6 +362,7 @@ export {
   showPostForm,
   bindRegisterbtn,
   bindLoginBtn,
+  bindfiletrBtn,
   showMessage,
   showErrorPage,
   postActions,

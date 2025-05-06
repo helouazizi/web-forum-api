@@ -136,6 +136,33 @@ async function fetchPosts() {
   }
 }
 
+async function fetchFilteredPosts(categories) {
+  try {
+    const response = await fetch("http://localhost:3000/api/v1/posts/filter", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify({ categories }), // send selected categories
+    });
+
+    if (!response.ok) {
+      const err = {
+        code: response.status,
+        message: response.statusText,
+      };
+      throw err;
+    }
+
+    const posts = await response.json();    
+    return posts;
+  } catch (error) {
+    showErrorPage(error);
+  }
+}
+
+
 async function reactToPost(postId, reaction) {
   try {
     const response = await fetch("http://localhost:3000/api/v1/posts/react", {
@@ -230,4 +257,5 @@ export {
   reactToPost,
   sendPostCommen,
   showComments,
+  fetchFilteredPosts
 };

@@ -202,3 +202,24 @@ func (h *PostHandler) FetchComments(w http.ResponseWriter, r *http.Request) {
 
 	utils.RespondWithJSON(w, http.StatusOK, comments)
 }
+
+func (h *PostHandler) FilterPosts(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		utils.RespondWithJSON(w, http.StatusMethodNotAllowed, models.Error{Message: "Methos Not Allowed", Code: http.StatusMethodNotAllowed})
+		return
+	}
+	var Post models.Post
+	if err := json.NewDecoder(r.Body).Decode(&Post); err != nil {
+		logger.LogWithDetails(err)
+		utils.RespondWithJSON(w, http.StatusBadRequest, models.Error{Message: "Bad Request", Code: http.StatusBadRequest})
+		return
+	}
+	filtredPosts, err1 := h.PostService.FilterPosts(Post.Categories)
+	if err1.Code != http.StatusOK {
+		logger.LogWithDetails(fmt.Errorf(err1.Message))
+		utils.RespondWithJSON(w, err1.Code, err1)
+		return
+	}
+	// our response
+	utils.RespondWithJSON(w, http.StatusOK, filtredPosts)
+}

@@ -8,24 +8,23 @@ import (
 )
 
 func SetupRoutes(h *app.Application) *http.ServeMux {
-	mux := http.DefaultServeMux
+	mux := http.NewServeMux()
 
-	// the home route
+	// --- Home (supports GET and POST inside handler) ---
 	mux.HandleFunc("/", h.Home.Home)
 
-	// this route for user
+	// --- User routes ---
 	mux.HandleFunc("/api/v1/users/register", h.UserHandler.CreateUser)
-	// http.HandleFunc("POST /users/update", h.UserHandler.UpdateUser)
 	mux.HandleFunc("/api/v1/users/login", h.UserHandler.Login)
 	mux.HandleFunc("/api/v1/users/logout", h.UserHandler.Logout)
 	mux.HandleFunc("/api/v1/users/info", h.UserHandler.GetUserInfo)
 
-	// this routs for posts
+	// --- Post routes (with auth middleware) ---
 	mux.Handle("/api/v1/posts/create", middlewares.AuthMiddleware(http.HandlerFunc(h.PostHandler.CreatePost), h.DB))
 	mux.Handle("/api/v1/posts/react", middlewares.AuthMiddleware(http.HandlerFunc(h.PostHandler.ReactToPost), h.DB))
 	mux.Handle("/api/v1/posts/addComment", middlewares.AuthMiddleware(http.HandlerFunc(h.PostHandler.CommentPost), h.DB))
 	mux.Handle("/api/v1/posts/fetchComments", middlewares.AuthMiddleware(http.HandlerFunc(h.PostHandler.FetchComments), h.DB))
-	// http.HandleFunc("/users", h.UserHandler.ListUsers)
+	mux.Handle("/api/v1/posts/filter", middlewares.AuthMiddleware(http.HandlerFunc(h.PostHandler.FilterPosts), h.DB))
 
 	return mux
 }

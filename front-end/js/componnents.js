@@ -314,6 +314,49 @@ let postForm = (errors = {}) => {
            `;
   return form;
 };
+let  filterForm = () => {
+  const container = document.createElement("form");
+  container.id = "categoryFilterPanel";
+  container.className = "category-filter-form";
+  container.setAttribute("aria-label", "Filter posts by category");
+
+  container.innerHTML = `
+    <div class="filter-header">
+      <h2>Filter Posts</h2>
+    </div>
+
+    <div class="form-group">
+      <label for="category-list">Select Categories:</label>
+      <div class="category-container" id="category-list">
+        ${[
+          { id: "tech", name: "Technology" },
+          { id: "sci", name: "Science" },
+          { id: "health", name: "Health" },
+          { id: "life", name: "Lifestyle" },
+          { id: "edu", name: "Education" },
+          { id: "game", name: "Gaming" },
+          { id: "biz", name: "Business" },
+        ]
+          .map(
+            (cat) => `
+          <div class="category-checkbox">
+            <input type="checkbox" id="cat-${cat.id}" name="categories" value="${cat.name}" />
+            <label for="cat-${cat.id}">${cat.name}</label>
+          </div>`
+          )
+          .join("")}
+      </div>
+    </div>
+
+    <div class="form-buttons">
+      <button type="submit" id="applyFilter" class="primary-btn">Apply Filter</button>
+      <button type="button" id="closeFilter" class="close-filter-btn">Cancel</button>
+    </div>
+  `;
+
+  return container;
+};
+
 
 let Footer = () => {
   let footer = document.createElement("footer");
@@ -323,4 +366,4 @@ let Footer = () => {
   return footer;
 };
 
-export { Footer, Header, loginForm, registerForm, postCard, postForm };
+export { Footer, Header, loginForm, registerForm, postCard, postForm,filterForm };
