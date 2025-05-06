@@ -189,7 +189,7 @@ func (r *PostRepository) AddComment(token string, reaction models.PostReaction) 
 }
 
 func (r *PostRepository) GetCommentsByPostID(postId int) ([]models.PostComments, models.Error) {
-	query := `SELECT c.id, c.comment, c.created_at, u.username
+	query := `SELECT c.id, c.comment, c.created_at, u.nickname
 			  FROM post_comments c
 			  JOIN users u ON c.user_id = u.id
 			  WHERE c.post_id = ?

@@ -171,17 +171,20 @@ async function sendPostCommen(postId, commenttext) {
   console.log(postId, commenttext, "hhhh");
 
   try {
-    const response = await fetch("http://localhost:3000/api/v1/posts/addComment", {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        post_id: parseInt(postId),
-        comment: commenttext,
-      }),
-    });
+    const response = await fetch(
+      "http://localhost:3000/api/v1/posts/addComment",
+      {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          post_id: parseInt(postId),
+          comment: commenttext,
+        }),
+      }
+    );
 
     if (!response.ok) {
       const errData = await response.json();
@@ -204,7 +207,10 @@ async function sendPostCommen(postId, commenttext) {
 async function showComments(postId, container) {
   try {
     const response = await fetch(
-      `http://localhost:3000/api/v1/posts/fetchComments?postId=${postId}`
+      `http://localhost:3000/api/v1/posts/fetchComments?postId=${postId}`,
+      {
+        credentials: "include",
+      }
     );
     if (!response.ok) {
       const errData = await response.json();
@@ -215,14 +221,15 @@ async function showComments(postId, container) {
       throw err;
     }
     const comments = await response.json();
-
+    console.log(comments, "comments");
+    if (!comments) return;
     const commentsContainer = document.createElement("div");
     commentsContainer.className = "comments-list";
-
+    container.getElementsByClassName("comments-list")[0]?.remove();
     comments.forEach((comment) => {
       const commentEl = document.createElement("div");
       commentEl.className = "comment-item";
-      commentEl.textContent = `${comment.user}: ${comment.text}`;
+      commentEl.textContent = `${comment.Creator}: ${comment.Content}`;
       commentsContainer.appendChild(commentEl);
     });
 

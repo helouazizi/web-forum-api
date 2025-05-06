@@ -8,3 +8,9 @@
 2025/05/05 19:08:25 2025-05-05T19:08:25+01:00 [Function: web-forum/internal/handlers.(*UserHandler).GetUserInfo] [Line: 130] Token not found or invalid
 2025/05/05 19:08:26 2025-05-05T19:08:26+01:00 [Function: web-forum/internal/handlers.(*UserHandler).GetUserInfo] [Line: 130] Token not found or invalid
 2025/05/05 19:09:49 2025-05-05T19:09:49+01:00 [Function: web-forum/internal/routers.SetupRoutes.AuthMiddleware.func4] [Line: 18] Token not found or invalid
+2025/05/06 09:53:35 2025-05-06T09:53:35+01:00 [Function: web-forum/internal/handlers.(*UserHandler).GetUserInfo] [Line: 130] Token not found or invalid
+2025/05/06 09:54:02 2025-05-06T09:54:02+01:00 [Function: web-forum/internal/repository.(*PostRepository).GetCommentsByPostID] [Line: 200] failed to query comments: no such column: u.username
+2025/05/06 09:55:24 2025-05-06T09:55:24+01:00 [Function: web-forum/internal/repository.(*PostRepository).GetCommentsByPostID] [Line: 200] failed to query comments: no such column: u.user_name
+2025/05/06 10:10:52 2025-05-06T10:10:52+01:00 [Function: web-forum/internal/handlers.(*UserHandler).GetUserInfo] [Line: 130] Token not found or invalid
+2025/05/06 10:10:56 2025-05-06T10:10:56+01:00 [Function: web-forum/internal/routers.SetupRoutes.AuthMiddleware.func4] [Line: 17] Token not found or invalid
+2025/05/06 10:11:37 2025-05-06T10:11:37+01:00 [Function: web-forum/internal/handlers.(*UserHandler).GetUserInfo] [Line: 130] Token not found or invalid

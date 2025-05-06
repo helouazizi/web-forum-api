@@ -204,7 +204,7 @@ function postActions() {
     postCard.querySelector(".fa-thumbs-up")?.addEventListener("click", () => {
       console.log("User liked post:", postId);
       reactToPost(postId, "like");
-      renderHomePage();
+      // renderHomePage();
     });
 
     // Dislike
@@ -212,7 +212,7 @@ function postActions() {
       console.log("User disliked post:", postId);
       // callDislikeAPI(postId);
       reactToPost(postId, "dislike");
-      renderHomePage();
+      // renderHomePage();
     });
 
     // Show comments
@@ -231,7 +231,7 @@ function postActions() {
         console.log("User commented on post:", postId, "Comment:", comment);
         input.value = "";
         sendPostCommen(postId, comment);
-        renderHomePage();
+        // renderHomePage();
       }
     });
   });
